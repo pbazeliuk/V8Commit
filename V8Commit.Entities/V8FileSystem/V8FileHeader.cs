@@ -60,7 +60,7 @@ namespace V8Commit.Entities.V8FileSystem
 
         public static Int32 Size()
         {
-            return 20; // 8 + 8 + 4 http://en.wikipedia.org/wiki/Data_structure_alignment
+            return 20; // 8 + 8 + 4
         }
     }
 }

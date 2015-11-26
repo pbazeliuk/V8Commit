@@ -50,6 +50,5 @@ namespace V8Commit.Entities.V8FileSystem
         {
             return 12; // 4 + 4 + 4
         }
-
     }
 }

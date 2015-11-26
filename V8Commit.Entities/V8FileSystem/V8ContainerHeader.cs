@@ -66,8 +66,7 @@ namespace V8Commit.Entities.V8FileSystem
 
         public static Int32 Size()
         {
-            return 16; // 4 + 4 + 4 + 4 buffer must exactly 16 byte
+            return 16; // 4 + 4 + 4 + 4
         }
-
     }
 }
