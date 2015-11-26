@@ -1,7 +1,6 @@
-﻿
-using System.Security;
+﻿using System.Security;
 
-namespace V8Commit.Services
+namespace V8Commit.Services.HashServices
 {
     public interface IHashService
     {

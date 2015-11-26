@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ConversionServices\ConversionService.cs" />
     <Compile Include="HashServices\IHashService.cs" />
+    <Compile Include="HashServices\MD5HashService.cs" />
     <Compile Include="HashServices\Sha512HashService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

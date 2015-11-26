@@ -6,7 +6,7 @@ using System.Text;
 
 namespace V8Commit.Services.HashServices
 {
-    public class Sha512HashService : IHashService
+    public class MD5HashService : IHashService
     {
         public string HashString(string source)
         {
@@ -41,11 +41,10 @@ namespace V8Commit.Services.HashServices
 
         private byte[] MakeHash(byte[] data)
         {
-            using (var sha512Hash = new SHA512Managed())
+            using (var md5Hash = MD5.Create())
             {
-                return sha512Hash.ComputeHash(data);
+                return md5Hash.ComputeHash(data);
             }
         }
-
     }
 }

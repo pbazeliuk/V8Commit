@@ -1,5 +1,4 @@
-﻿
-using System.Security;
+﻿using System.Security;
 
 namespace V8Commit.Services
 {

@@ -5,7 +5,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using V8Commit.Services;
-
+using V8Commit.Services.HashServices;
 
 namespace V8Commit.ConsoleApp
 {
@@ -13,6 +13,7 @@ namespace V8Commit.ConsoleApp
     {
         static void Main(string[] args)
         {
+
 
         }
     }
