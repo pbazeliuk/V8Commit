@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("V8Commit.Console")]
+[assembly: AssemblyTitle("V8Commit.Services")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("V8Commit.Console")]
+[assembly: AssemblyProduct("V8Commit.Services")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("62935558-c28d-403f-abcc-4e5b9eaf7dfa")]
+[assembly: Guid("0680410b-3b97-475d-8fbc-71581209a860")]
 
 // Version information for an assembly consists of the following four values:
 //
