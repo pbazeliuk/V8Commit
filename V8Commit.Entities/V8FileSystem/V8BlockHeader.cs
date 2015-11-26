@@ -44,7 +44,7 @@ namespace V8Commit.Entities.V8FileSystem
 
         public static Int32 Size()
         {
-            return 12; // 4 + 4 + 4
+            return 31; // 1 + 1 + 8 + 1 + 8 + 1 + 8 + 1 + 1 + 1
         }
     }
 }

@@ -47,7 +47,24 @@ namespace V8Commit.Repositories
 
         public V8BlockHeader ReadBlockHeader()
         {
-            throw new NotImplementedException();
+            char[] Block = _reader.ReadChars(V8BlockHeader.Size());
+            if (Block[0]  != 0x0d || Block[1]  != 0x0a ||
+                Block[10] != 0x20 || Block[19] != 0x20 || 
+                Block[28] != 0x20 || Block[29] != 0x0d || Block[30] != 0x0a)
+            {
+                throw new NotImplementedException();
+            }
+
+            string HexDataSize = new string(Block, 2, 8);
+            string HexPageSize = new string(Block, 11, 8);
+            string HexNextPage = new string(Block, 20, 8);
+
+            V8BlockHeader header = new V8BlockHeader();
+            header.DataSize = Convert.ToInt32(HexDataSize, 16);
+            header.PageSize = Convert.ToInt32(HexPageSize, 16);
+            header.RefToNextPage = Convert.ToInt32(HexNextPage, 16);
+
+            return header;
         }
 
 

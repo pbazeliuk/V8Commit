@@ -20,6 +20,12 @@ namespace V8Commit.ConsoleApp
             Console.WriteLine(container.PageSize);
             Console.WriteLine(container.PagesCount);
             Console.WriteLine(container.ReservedField);
+
+            var blockHeader = testContainer.ReadBlockHeader();
+            Console.WriteLine(blockHeader.DataSize);
+            Console.WriteLine(blockHeader.PageSize);
+            Console.WriteLine(blockHeader.RefToNextPage);
+
         }
     }
 }
