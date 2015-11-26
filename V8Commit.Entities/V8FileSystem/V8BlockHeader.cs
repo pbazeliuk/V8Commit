@@ -16,7 +16,7 @@ namespace V8Commit.Entities.V8FileSystem
             }
             set
             {
-                _dataSize = DataSize;
+                _dataSize = value;
             }
         }  
         public Int32 PageSize
@@ -27,7 +27,7 @@ namespace V8Commit.Entities.V8FileSystem
             }
             set
             {
-                PageSize = _pageSize;
+                _pageSize = value;
             }
         } 
         public Int32 RefToNextPage
@@ -38,7 +38,7 @@ namespace V8Commit.Entities.V8FileSystem
             }
             set
             {
-                _refToNextPage = RefToNextPage;
+                _refToNextPage = value;
             }
         }
 

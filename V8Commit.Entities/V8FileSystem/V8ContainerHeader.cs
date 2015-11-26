@@ -19,7 +19,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _refToNextPage = RefToNextPage;
+                _refToNextPage = value;
             }
         }
         public Int32 PageSize
@@ -31,7 +31,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _pageSize = PageSize;
+                _pageSize = value;
             }
         }
         public Int32 PagesCount
@@ -43,7 +43,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _pagesCount = PagesCount;
+                _pagesCount = value;
             }
         }
         public Int32 ReservedField
@@ -55,7 +55,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _reservedField = ReservedField;
+                _reservedField = value;
             }
         }
 

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.ConsoleApp", "V8Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.Services", "..\V8Commit.Services\V8Commit.Services.csproj", "{0680410B-3B97-475D-8FBC-71581209A860}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.Entities", "..\V8Commit.Entities\V8Commit.Entities.csproj", "{B060ED1E-ADCC-4AD1-8F84-BD63B8F30A95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.Repositories", "..\V8Commit.Repositories\V8Commit.Repositories.csproj", "{E4FFDF17-4881-4FF0-B941-30D3BD679201}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{0680410B-3B97-475D-8FBC-71581209A860}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0680410B-3B97-475D-8FBC-71581209A860}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0680410B-3B97-475D-8FBC-71581209A860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B060ED1E-ADCC-4AD1-8F84-BD63B8F30A95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B060ED1E-ADCC-4AD1-8F84-BD63B8F30A95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B060ED1E-ADCC-4AD1-8F84-BD63B8F30A95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B060ED1E-ADCC-4AD1-8F84-BD63B8F30A95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4FFDF17-4881-4FF0-B941-30D3BD679201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4FFDF17-4881-4FF0-B941-30D3BD679201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4FFDF17-4881-4FF0-B941-30D3BD679201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4FFDF17-4881-4FF0-B941-30D3BD679201}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

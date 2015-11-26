@@ -20,7 +20,7 @@ namespace V8Commit.Entities.V8FileSystem
             }
             set
             {
-                _refToHeader = RefToHeader;
+                _refToHeader = value;
             }
         } 
         public Int32 RefToData
@@ -31,7 +31,7 @@ namespace V8Commit.Entities.V8FileSystem
             }
             set
             {
-                _refToData = RefToData;
+                _refToData = value;
             }
         } 
         public Int32 ReservedField
@@ -42,7 +42,7 @@ namespace V8Commit.Entities.V8FileSystem
             }
             set
             {
-                _reservedField = ReservedField;
+                _reservedField = value;
             }
         }
 

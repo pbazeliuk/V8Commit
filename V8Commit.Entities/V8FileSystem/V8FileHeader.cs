@@ -18,7 +18,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _creationDate = CreationDate;
+                _creationDate = value;
             }
         }
         public UInt64 ModificationDate
@@ -30,7 +30,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _modificationDate = ModificationDate;
+                _modificationDate = value;
             }
         }
         public Int32 ReservedField
@@ -42,7 +42,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _reservedField = ReservedField;
+                _reservedField = value;
             }
         }
         public string FileName
@@ -54,7 +54,7 @@ namespace V8Commit.Entities.V8FileSystem
 
             set
             {
-                _fileName = FileName;
+                _fileName = value;
             }
         }
 
