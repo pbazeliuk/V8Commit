@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("V8Commit.WebUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("V8Commit - simple boxing and unboxing 1CV8 files")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("pbazeliuk.com")]
 [assembly: AssemblyProduct("V8Commit.WebUI")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © Petro Bazeliuk 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2a1253d5-2847-47c7-9feb-e75b18a443a2")]
+[assembly: Guid("0a346baa-94e9-40da-83ca-fda467f0a663")]
 
 // Version information for an assembly consists of the following four values:
 //

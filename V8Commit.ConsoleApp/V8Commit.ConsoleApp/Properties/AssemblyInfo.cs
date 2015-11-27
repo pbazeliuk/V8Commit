@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("V8Commit.ConsoleApp")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("V8Commit - simple boxing and unboxing 1CV8 files")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("pbazeliuk.com")]
 [assembly: AssemblyProduct("V8Commit.ConsoleApp")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © Petro Bazeliuk 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
