@@ -14,9 +14,9 @@ namespace V8Commit.ConsoleApp
     {
         static void Main(string[] args)
         {
-            string output = @"D:\V8Commit\V8Commit.Output\";
+            string output = @"D:\V8Commit\service\output\";
 
-            IV8CommitRepository testContainer = new FileV8CommitRepository(@"D:\V8Commit\V8Commit.TestData\Обработка1.epf");
+            IV8CommitRepository testContainer = new FileV8CommitRepository(@"D:\V8Commit\service\data\Обработка1.epf");
             var fileSystem = testContainer.ReadV8FileSystem();
 
             foreach (var c in fileSystem.References)

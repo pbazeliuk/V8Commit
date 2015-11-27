@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.IO.MemoryMappedFiles;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using V8Commit.Entities.V8FileSystem;
 
 namespace V8Commit.Repositories
@@ -75,6 +71,7 @@ namespace V8Commit.Repositories
             return fileSystem;
         }
 
+        // TODO : make as plugins
         public void WriteToOutputDirectory(V8FileSystem fileSystem, string outputDirectory)
         {
             foreach (var reference in fileSystem.References)

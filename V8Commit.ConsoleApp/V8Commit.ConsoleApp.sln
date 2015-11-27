@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.Entities", "..\V8C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.Repositories", "..\V8Commit.Repositories\V8Commit.Repositories.csproj", "{E4FFDF17-4881-4FF0-B941-30D3BD679201}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.Plugins", "..\V8Commit.Plugins\V8Commit.Plugins.csproj", "{E9AAAA4E-8C40-456C-8B5C-FF8622EEC768}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E4FFDF17-4881-4FF0-B941-30D3BD679201}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4FFDF17-4881-4FF0-B941-30D3BD679201}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4FFDF17-4881-4FF0-B941-30D3BD679201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9AAAA4E-8C40-456C-8B5C-FF8622EEC768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9AAAA4E-8C40-456C-8B5C-FF8622EEC768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9AAAA4E-8C40-456C-8B5C-FF8622EEC768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9AAAA4E-8C40-456C-8B5C-FF8622EEC768}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
