@@ -28,12 +28,14 @@ namespace V8Commit.ConsoleApp
             Console.WriteLine(fileSystem.BlockHeader.PageSize);
             Console.WriteLine(fileSystem.BlockHeader.RefToNextPage);
 
+            DateTime start = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             foreach (var c in fileSystem.References)
             {
                 Console.WriteLine("\nSystem reference:");
-                Console.WriteLine(c.RefToHeader);
-                Console.WriteLine(c.RefToData);
-                Console.WriteLine(c.ReservedField);
+                Console.WriteLine(start.AddMilliseconds(c.FileHeader.CreationDate / 1000 * 100).ToLocalTime());
+                Console.WriteLine(start.AddMilliseconds(c.FileHeader.ModificationDate / 1000 * 100).ToLocalTime());
+                Console.WriteLine(c.FileHeader.ReservedField);
+                Console.WriteLine(c.FileHeader.FileName);
             }
 
         }

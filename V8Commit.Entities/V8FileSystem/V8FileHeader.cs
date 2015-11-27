@@ -37,7 +37,7 @@ namespace V8Commit.Entities.V8FileSystem
         {
             get
             {
-                return ReservedField;
+                return _reservedField;
             }
 
             set

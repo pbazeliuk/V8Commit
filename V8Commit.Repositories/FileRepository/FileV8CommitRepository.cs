@@ -61,6 +61,7 @@ namespace V8Commit.Repositories
 
             return container;
         }
+
         private V8BlockHeader ReadBlockHeader()
         {
             char[] Block = _reader.ReadChars(V8BlockHeader.Size());
@@ -82,6 +83,26 @@ namespace V8Commit.Repositories
 
             return header;
         }
+
+        private V8BlockHeader ReadBlockHeader(Int32 refToHeader)
+        {
+            _reader.BaseStream.Seek(refToHeader, SeekOrigin.Begin);
+            return ReadBlockHeader();
+        }
+
+        private V8FileHeader ReadFileHeader(Int32 dataSize)
+        {
+            V8FileHeader fileHeader = new V8FileHeader();
+            fileHeader.CreationDate = _reader.ReadUInt64();
+            fileHeader.ModificationDate = _reader.ReadUInt64();
+            fileHeader.ReservedField = _reader.ReadInt32();
+
+            string fileName = new string(_reader.ReadChars(dataSize - V8FileHeader.Size()));
+            fileHeader.FileName = fileName.Replace("\0", string.Empty);
+
+            return fileHeader;
+        }
+
         private V8FileSystemReference ReadFileSystemReference(byte[] buffer, int position)
         {
             V8FileSystemReference reference = new V8FileSystemReference();
@@ -91,6 +112,7 @@ namespace V8Commit.Repositories
 
             return reference;
         }
+
         private List<V8FileSystemReference> ReadFileSystemReferences(V8BlockHeader blockHeader)
         {
             List<V8FileSystemReference> references = new List<V8FileSystemReference>();
@@ -116,17 +138,17 @@ namespace V8Commit.Repositories
             bytesReaded = 0;
             while (dataSize > bytesReaded)
             {
-                references.Add(ReadFileSystemReference(bytes, bytesReaded));
+                V8FileSystemReference reference = ReadFileSystemReference(bytes, bytesReaded);
+                reference.HeaderRaw = ReadBlockHeader(reference.RefToHeader);
+                reference.FileHeader = ReadFileHeader(reference.HeaderRaw.DataSize);
+                references.Add(reference);
                 bytesReaded += V8FileSystemReference.Size();
             }
 
             return references;
         }
 
-        public V8FileHeader ReadFileHeader()
-        {
-            throw new NotImplementedException();
-        }
+
 
  
 
