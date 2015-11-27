@@ -109,12 +109,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\cover.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap.css" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Scripts\libs\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\libs\bootstrap\js\bootstrap-filestyle.min.js" />
+    <Content Include="Scripts\libs\bootstrap\js\bootstrap.js" />
+    <Content Include="Scripts\libs\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Scripts\libs\bootstrap\js\npm.js" />
+    <Content Include="Scripts\libs\jquery\jquery-2.1.4.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="Controllers\V8CommitController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -123,6 +135,16 @@
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Scripts\libs\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\libs\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Scripts\libs\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\libs\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\Shared\Layout.cshtml" />
+    <Content Include="Views\V8Commit\Index.cshtml" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.min.css.map" />
+    <Content Include="Scripts\libs\bootstrap\css\bootstrap.min.css.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -132,8 +154,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
+    <Folder Include="Scripts\pages\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
