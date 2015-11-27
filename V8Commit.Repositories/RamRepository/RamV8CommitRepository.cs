@@ -13,5 +13,10 @@ namespace V8Commit.Repositories.RamRepository
         {
             throw new NotImplementedException();
         }
+
+        public void WriteToOutputDirectory(V8FileSystem fileSystem, string outputDirectory)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

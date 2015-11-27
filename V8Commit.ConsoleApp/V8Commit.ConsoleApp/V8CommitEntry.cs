@@ -14,19 +14,10 @@ namespace V8Commit.ConsoleApp
     {
         static void Main(string[] args)
         {
+            string output = @"D:\V8Commit\V8Commit.Output\";
+
             IV8CommitRepository testContainer = new FileV8CommitRepository(@"D:\V8Commit\V8Commit.TestData\Обработка1.epf");
             var fileSystem = testContainer.ReadV8FileSystem();
-
-            Console.WriteLine("Container:");
-            Console.WriteLine(fileSystem.Container.RefToNextPage);
-            Console.WriteLine(fileSystem.Container.PageSize);
-            Console.WriteLine(fileSystem.Container.PagesCount);
-            Console.WriteLine(fileSystem.Container.ReservedField);
-
-            Console.WriteLine("\nBlock header:");
-            Console.WriteLine(fileSystem.BlockHeader.DataSize);
-            Console.WriteLine(fileSystem.BlockHeader.PageSize);
-            Console.WriteLine(fileSystem.BlockHeader.RefToNextPage);
 
             foreach (var c in fileSystem.References)
             {
@@ -36,6 +27,8 @@ namespace V8Commit.ConsoleApp
                 Console.WriteLine(c.FileHeader.ReservedField);
                 Console.WriteLine(c.FileHeader.FileName);
             }
+
+            testContainer.WriteToOutputDirectory(fileSystem, output);
 
         }
     }

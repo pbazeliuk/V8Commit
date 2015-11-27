@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,14 +42,31 @@ namespace V8Commit.Repositories
             
             // Reading container 16 bytes
             fileSystem.Container = ReadContainerHeader();
-            
-            // Reading block header 31 bytes
-            fileSystem.BlockHeader = ReadBlockHeader();
 
             // Reading container references
-            fileSystem.References = ReadFileSystemReferences((V8BlockHeader)fileSystem.BlockHeader.Clone());
+            fileSystem.References = ReadFileSystemReferences();
 
             return fileSystem;
+        }
+
+        public void WriteToOutputDirectory(V8FileSystem fileSystem, string outputDirectory)
+        {
+            foreach (var reference in fileSystem.References)
+            {
+                _reader.BaseStream.Seek(reference.RefToData, SeekOrigin.Begin);
+                string newFileName = outputDirectory + reference.FileHeader.FileName;
+                using (FileStream decompressedFileStream = File.Create(newFileName))
+                {
+                    using (MemoryStream memStream = new MemoryStream(ReadBytes(ReadBlockHeader())))
+                    {
+                        using (DeflateStream deflateStream = new DeflateStream(memStream, CompressionMode.Decompress))
+                        {
+                            deflateStream.CopyTo(decompressedFileStream);
+                        }
+                    }
+                }
+
+            }
         }
 
         private V8ContainerHeader ReadContainerHeader()
@@ -113,15 +131,35 @@ namespace V8Commit.Repositories
             return reference;
         }
 
-        private List<V8FileSystemReference> ReadFileSystemReferences(V8BlockHeader blockHeader)
+        private List<V8FileSystemReference> ReadFileSystemReferences(bool isInflated = true)
         {
-            List<V8FileSystemReference> references = new List<V8FileSystemReference>();
-            references.Capacity = (int)(blockHeader.DataSize / V8FileSystemReference.Size());
+            V8BlockHeader blockHeader = ReadBlockHeader();
+            Int32 dataSize = blockHeader.DataSize;
+            Int32 capacity = (int)(dataSize / V8FileSystemReference.Size());
+            byte[] bytes = ReadBytes(blockHeader);
 
+            List<V8FileSystemReference> references = new List<V8FileSystemReference>(capacity);
+
+            Int32 bytesReaded = 0;
+            while (dataSize > bytesReaded)
+            {
+                V8FileSystemReference reference = ReadFileSystemReference(bytes, bytesReaded);
+                reference.IsInFlated = isInflated;
+                reference.FileHeader = ReadFileHeader(ReadBlockHeader(reference.RefToHeader).DataSize);
+                references.Add(reference);
+
+                bytesReaded += V8FileSystemReference.Size();
+            }
+
+            return references;
+        }
+     
+        private byte[] ReadBytes(V8BlockHeader blockHeader)
+        {
             Int32 bytesReaded = 0;
             Int32 bytesToRead = 0;
             Int32 dataSize = blockHeader.DataSize;
-            byte[] bytes = new byte[blockHeader.DataSize];
+            byte[] bytes = new byte[dataSize];
 
             while (dataSize > bytesReaded)
             {
@@ -135,23 +173,7 @@ namespace V8Commit.Repositories
                 }
             }
 
-            bytesReaded = 0;
-            while (dataSize > bytesReaded)
-            {
-                V8FileSystemReference reference = ReadFileSystemReference(bytes, bytesReaded);
-                reference.HeaderRaw = ReadBlockHeader(reference.RefToHeader);
-                reference.FileHeader = ReadFileHeader(reference.HeaderRaw.DataSize);
-                references.Add(reference);
-                bytesReaded += V8FileSystemReference.Size();
-            }
-
-            return references;
+            return bytes;
         }
-
-
-
- 
-
-       
     }
 }

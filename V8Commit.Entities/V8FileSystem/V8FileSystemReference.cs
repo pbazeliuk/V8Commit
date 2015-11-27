@@ -12,10 +12,7 @@ namespace V8Commit.Entities.V8FileSystem
         private Int32 _refToData;
         private Int32 _reservedField;
 
-        private V8BlockHeader _headerRaw;
         private V8FileHeader _fileHeader;
-
-        private V8BlockHeader _headerData;
         private byte[] _fileData;
 
         private bool _isInflated;
@@ -57,17 +54,6 @@ namespace V8Commit.Entities.V8FileSystem
             }
         }
 
-        public V8BlockHeader HeaderRaw
-        {
-            get
-            {
-                return _headerRaw;
-            }
-            set
-            {
-                _headerRaw = value;
-            }
-        }
         public V8FileHeader FileHeader
         {
             get
@@ -77,18 +63,6 @@ namespace V8Commit.Entities.V8FileSystem
             set
             {
                 _fileHeader = value;
-            }
-        }
-
-        public V8BlockHeader HeaderData
-        {
-            get
-            {
-                return _headerData;
-            }
-            set
-            {
-                _headerData = value;
             }
         }
         public byte[] FileData
@@ -103,7 +77,7 @@ namespace V8Commit.Entities.V8FileSystem
             }
         }
 
-        public bool IsInflated
+        public bool IsInFlated
         {
             get
             {
