@@ -14,17 +14,27 @@ namespace V8Commit.ConsoleApp
     {
         static void Main(string[] args)
         {
-            IV8CommitRepository testContainer = new FileV8CommitRepository(@"D:\V8Commit\V8Commit.TestData\btc-e.cf");
-            var container = testContainer.ReadContainerHeader();
-            Console.WriteLine(container.RefToNextPage);
-            Console.WriteLine(container.PageSize);
-            Console.WriteLine(container.PagesCount);
-            Console.WriteLine(container.ReservedField);
+            IV8CommitRepository testContainer = new FileV8CommitRepository(@"D:\V8Commit\V8Commit.TestData\Обработка1.epf");
+            var fileSystem = testContainer.ReadV8FileSystem();
 
-            var blockHeader = testContainer.ReadBlockHeader();
-            Console.WriteLine(blockHeader.DataSize);
-            Console.WriteLine(blockHeader.PageSize);
-            Console.WriteLine(blockHeader.RefToNextPage);
+            Console.WriteLine("Container:");
+            Console.WriteLine(fileSystem.Container.RefToNextPage);
+            Console.WriteLine(fileSystem.Container.PageSize);
+            Console.WriteLine(fileSystem.Container.PagesCount);
+            Console.WriteLine(fileSystem.Container.ReservedField);
+
+            Console.WriteLine("\nBlock header:");
+            Console.WriteLine(fileSystem.BlockHeader.DataSize);
+            Console.WriteLine(fileSystem.BlockHeader.PageSize);
+            Console.WriteLine(fileSystem.BlockHeader.RefToNextPage);
+
+            foreach (var c in fileSystem.References)
+            {
+                Console.WriteLine("\nSystem reference:");
+                Console.WriteLine(c.RefToHeader);
+                Console.WriteLine(c.RefToData);
+                Console.WriteLine(c.ReservedField);
+            }
 
         }
     }

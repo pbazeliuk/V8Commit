@@ -9,9 +9,6 @@ namespace V8Commit.Repositories
 {
     public interface IV8CommitRepository
     {
-        V8ContainerHeader ReadContainerHeader();
-        V8BlockHeader ReadBlockHeader();
-        V8FileSystemReference ReadFileSystemReference();
-        V8FileHeader ReadFileHeader();
+        V8FileSystem ReadV8FileSystem();
     }
 }

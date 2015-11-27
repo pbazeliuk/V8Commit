@@ -9,22 +9,7 @@ namespace V8Commit.Repositories.RamRepository
 {
     public class RamV8CommitRepository : IV8CommitRepository
     {
-        public V8BlockHeader ReadBlockHeader()
-        {
-            throw new NotImplementedException();
-        }
-
-        public V8ContainerHeader ReadContainerHeader()
-        {
-            throw new NotImplementedException();
-        }
-
-        public V8FileHeader ReadFileHeader()
-        {
-            throw new NotImplementedException();
-        }
-
-        public V8FileSystemReference ReadFileSystemReference()
+        public V8FileSystem ReadV8FileSystem()
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 
 namespace V8Commit.Entities.V8FileSystem
 {
-    public class V8BlockHeader
+    public class V8BlockHeader : ICloneable
     {
         private Int32 _dataSize;
         private Int32 _pageSize;
@@ -45,6 +45,11 @@ namespace V8Commit.Entities.V8FileSystem
         public static Int32 Size()
         {
             return 31; // 1 + 1 + 8 + 1 + 8 + 1 + 8 + 1 + 1 + 1
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

@@ -12,6 +12,17 @@ namespace V8Commit.Entities.V8FileSystem
         private Int32 _refToData;
         private Int32 _reservedField;
 
+        private V8BlockHeader _headerRaw;
+        private V8FileHeader _fileHeader;
+
+        private V8BlockHeader _headerData;
+        private byte[] _fileData;
+
+        private bool _isInflated;
+        private bool _isFolder;
+
+        private V8FileSystem _folder;
+
         public Int32 RefToHeader
         {
             get
@@ -43,6 +54,87 @@ namespace V8Commit.Entities.V8FileSystem
             set
             {
                 _reservedField = value;
+            }
+        }
+
+        public V8BlockHeader HeaderRaw
+        {
+            get
+            {
+                return _headerRaw;
+            }
+            set
+            {
+                _headerRaw = value;
+            }
+        }
+        public V8FileHeader FileHeader
+        {
+            get
+            {
+                return _fileHeader;
+            }
+            set
+            {
+                _fileHeader = value;
+            }
+        }
+
+        public V8BlockHeader HeaderData
+        {
+            get
+            {
+                return _headerData;
+            }
+            set
+            {
+                _headerData = value;
+            }
+        }
+        public byte[] FileData
+        {
+            get
+            {
+                return _fileData;
+            }
+            set
+            {
+                _fileData = value;
+            }
+        }
+
+        public bool IsInflated
+        {
+            get
+            {
+                return _isInflated;
+            }
+            set
+            {
+                _isInflated = value;
+            }
+        }
+        public bool IsFolder
+        {
+            get
+            {
+                return _isFolder;
+            }
+            set
+            {
+                _isFolder = value;
+            }
+        }
+
+        public V8FileSystem Folder
+        {
+            get
+            {
+                return _folder;
+            }
+            set
+            {
+                _folder = value;
             }
         }
 
