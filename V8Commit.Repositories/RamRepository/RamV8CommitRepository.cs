@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,19 @@ namespace V8Commit.Repositories.RamRepository
 {
     public class RamV8CommitRepository : IV8CommitRepository
     {
-        public V8FileSystem ReadV8FileSystem()
+        private readonly string _fileName;
+
+        public V8FileSystem ReadHeadersV8FileSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public V8FileSystem ReadHeadersV8FileSystem(bool isInflated = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {
             throw new NotImplementedException();
         }

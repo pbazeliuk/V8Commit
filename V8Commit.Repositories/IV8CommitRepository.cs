@@ -9,7 +9,8 @@ namespace V8Commit.Repositories
 {
     public interface IV8CommitRepository
     {
-        V8FileSystem ReadV8FileSystem();
+        V8FileSystem ReadV8FileSystem(bool isInflated = true);
+        V8FileSystem ReadHeadersV8FileSystem();
         void WriteToOutputDirectory(V8FileSystem fileSystem, string outputDirectory);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,18 @@ namespace V8Commit.Repositories
             }    
         }
 
+        public FileV8CommitRepository(BinaryReader reader)
+        {
+            if (reader != null)
+            {
+                _reader = reader;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         ~FileV8CommitRepository()
         {
             if (_reader != null)
@@ -36,7 +49,7 @@ namespace V8Commit.Repositories
         }
 
 
-        public V8FileSystem ReadV8FileSystem()
+        public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {
             V8FileSystem fileSystem = new V8FileSystem();
             
@@ -44,7 +57,20 @@ namespace V8Commit.Repositories
             fileSystem.Container = ReadContainerHeader();
 
             // Reading container references
-            fileSystem.References = ReadFileSystemReferences();
+            fileSystem.References = ReadFileSystemReferences(isInflated);
+
+            return fileSystem;
+        }
+
+        public V8FileSystem ReadHeadersV8FileSystem()
+        {
+            V8FileSystem fileSystem = new V8FileSystem();
+
+            // Reading container 16 bytes
+            fileSystem.Container = ReadContainerHeader();
+
+            // Reading block header 31 bytes
+            fileSystem.BlockHeader = ReadBlockHeader();
 
             return fileSystem;
         }
@@ -53,20 +79,87 @@ namespace V8Commit.Repositories
         {
             foreach (var reference in fileSystem.References)
             {
-                _reader.BaseStream.Seek(reference.RefToData, SeekOrigin.Begin);
-                string newFileName = outputDirectory + reference.FileHeader.FileName;
-                using (FileStream decompressedFileStream = File.Create(newFileName))
+                // Seek to data block header
+                ReaderSeek(reference.RefToData);
+                string path = outputDirectory + reference.FileHeader.FileName;
+
+                using (MemoryStream memReader = new MemoryStream())
                 {
                     using (MemoryStream memStream = new MemoryStream(ReadBytes(ReadBlockHeader())))
                     {
-                        using (DeflateStream deflateStream = new DeflateStream(memStream, CompressionMode.Decompress))
+                        if (reference.IsInFlated)
                         {
-                            deflateStream.CopyTo(decompressedFileStream);
+                            using (DeflateStream deflateStream = new DeflateStream(memStream, CompressionMode.Decompress))
+                            {
+                                deflateStream.CopyTo(memReader);
+                            }
+                        }
+                        else
+                        {
+                            memStream.CopyTo(memReader);
+                        }  
+                    }
+   
+                    if (IsV8FileSystem(memReader, memReader.Capacity))
+                    {
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        memReader.Seek(0, SeekOrigin.Begin);
+
+                        _reader.Dispose();
+                        _reader = new BinaryReader(memReader);
+
+                        reference.Folder = ReadV8FileSystem(false);
+
+                        WriteToOutputDirectory(reference.Folder, path + "\\");
+
+                        _reader.Dispose();
+                        if (File.Exists(_fileName))
+                        {
+                            _reader = new BinaryReader(File.Open(_fileName, FileMode.Open));
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
+                    }
+                    else
+                    {
+                        using (FileStream fileStream = File.Create(path))
+                        {
+                            memReader.Seek(0, SeekOrigin.Begin);
+                            memReader.CopyTo(fileStream);
                         }
                     }
                 }
-
             }
+        }
+
+
+        private bool IsV8FileSystem(MemoryStream memStream, Int32 fileSize)
+        {
+            
+            if (fileSize < V8ContainerHeader.Size() + V8BlockHeader.Size())
+            {
+                return false;
+            }
+
+            memStream.Seek(0, SeekOrigin.Begin);
+            BinaryReader reader = new BinaryReader(memStream);
+            IV8CommitRepository v8Commit = new FileV8CommitRepository(reader);
+            try
+            {
+                V8FileSystem fileSystem = v8Commit.ReadHeadersV8FileSystem();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private V8ContainerHeader ReadContainerHeader()
@@ -100,12 +193,6 @@ namespace V8Commit.Repositories
             header.RefToNextPage = Convert.ToInt32(HexNextPage, 16);
 
             return header;
-        }
-
-        private V8BlockHeader ReadBlockHeader(Int32 refToHeader)
-        {
-            _reader.BaseStream.Seek(refToHeader, SeekOrigin.Begin);
-            return ReadBlockHeader();
         }
 
         private V8FileHeader ReadFileHeader(Int32 dataSize)
@@ -144,8 +231,11 @@ namespace V8Commit.Repositories
             while (dataSize > bytesReaded)
             {
                 V8FileSystemReference reference = ReadFileSystemReference(bytes, bytesReaded);
+             
+                // Seek to reference block header 
+                ReaderSeek(reference.RefToHeader);
+                reference.FileHeader = ReadFileHeader(ReadBlockHeader().DataSize);
                 reference.IsInFlated = isInflated;
-                reference.FileHeader = ReadFileHeader(ReadBlockHeader(reference.RefToHeader).DataSize);
                 references.Add(reference);
 
                 bytesReaded += V8FileSystemReference.Size();
@@ -168,12 +258,18 @@ namespace V8Commit.Repositories
                 bytesReaded += bytesToRead;
                 if (blockHeader.RefToNextPage != 0x7FFFFFFF)
                 {
-                    _reader.BaseStream.Seek(blockHeader.RefToNextPage, SeekOrigin.Begin);
+                    // Seek to next block header
+                    ReaderSeek(blockHeader.RefToNextPage);
                     blockHeader = ReadBlockHeader();
                 }
             }
 
             return bytes;
+        }
+
+        private void ReaderSeek(Int32 offset)
+        {
+            _reader.BaseStream.Seek(offset, SeekOrigin.Begin);
         }
     }
 }

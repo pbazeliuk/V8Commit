@@ -16,7 +16,6 @@ namespace V8Commit.Entities.V8FileSystem
         private byte[] _fileData;
 
         private bool _isInflated;
-        private bool _isFolder;
 
         private V8FileSystem _folder;
 
@@ -86,17 +85,6 @@ namespace V8Commit.Entities.V8FileSystem
             set
             {
                 _isInflated = value;
-            }
-        }
-        public bool IsFolder
-        {
-            get
-            {
-                return _isFolder;
-            }
-            set
-            {
-                _isFolder = value;
             }
         }
 
