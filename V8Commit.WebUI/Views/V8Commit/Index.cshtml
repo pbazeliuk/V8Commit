@@ -4,6 +4,10 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
+@section scripts
+{
+    <script src="~/Scripts/pages/v8commit.js"></script>
+}
 
 <div class="site-wrapper-inner">
 
@@ -25,9 +29,9 @@
         <div class="inner cover">
             <h1 class="cover-heading">V8Commit 3.0</h1>
             <p class="lead">Продукт для разборки конфигураций «1C:Предприятие 8» на текстовые файлы исходных кодов. Полученные файлы можно использовать в системах контроля версий и для обратной сборки.</p>
-            <p class="lead">
-                <input type="file" accept=".epf,.erf,.cf,.cfu" class="filestyle" data-buttonName="btn-primary" data-placeholder="Выберите файл «1C:Предприятие 8» (.epf, .erf, .cf, .cfu)">
-            </p>
+            <form>
+                <input type="file" class="filestyle" accept=".epf,.erf,.cf,.cfu" data-buttonName="btn-primary" data-placeholder="Выберите файл «1C:Предприятие 8» (.epf, .erf, .cf, .cfu)">
+            </form> 
         </div>
 
     </div>

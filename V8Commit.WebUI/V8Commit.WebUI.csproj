@@ -121,6 +121,7 @@
     <Content Include="Scripts\libs\bootstrap\js\bootstrap.min.js" />
     <Content Include="Scripts\libs\bootstrap\js\npm.js" />
     <Content Include="Scripts\libs\jquery\jquery-2.1.4.js" />
+    <Content Include="Scripts\pages\v8commit.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +156,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Scripts\pages\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
