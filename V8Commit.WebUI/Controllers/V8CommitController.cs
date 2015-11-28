@@ -29,7 +29,7 @@ namespace V8Commit.WebUI.Controllers
                 //To save file, use SaveAs method
                 //file.SaveAs(Server.MapPath("~/") + fileName); //File will be saved in application root
             }
-            return View();
+            return View(); // PartialView()
         }
     }
 }
