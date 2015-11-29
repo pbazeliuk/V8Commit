@@ -1,6 +1,7 @@
 ﻿using System;
+using System.IO;
+using CommandLine;
 using V8Commit.Repositories;
-using V8Commit.Services;
 
 namespace V8Commit.ConsoleApp
 {
@@ -8,22 +9,56 @@ namespace V8Commit.ConsoleApp
     {
         static void Main(string[] args)
         {
-            string output = @"D:\V8Commit\service\output\";
+            var help = new StringWriter();
+            new Parser(with => with.HelpWriter = help)
+                .ParseArguments(args, typeof(ParseVerb))
+                    .MapResult(
+                        (ParseVerb opts) => ParseVerb(opts),
+                        errors => {
+                            Console.WriteLine(help.ToString());
+                            return 1;
+                        });
+        }
 
-            IV8CommitRepository testContainer = new FileV8CommitRepository(@"D:\V8Commit\service\data\Обработка1.epf");
-            var fileSystem = testContainer.ReadV8FileSystem();
-
-            foreach (var c in fileSystem.References)
+        static int ParseVerb(ParseVerb opts)
+        {
+            // Common check input file
+            try
             {
-                Console.WriteLine("\nSystem reference:");
-                Console.WriteLine(ConversionService.Uint64ToDate(c.FileHeader.CreationDate));
-                Console.WriteLine(ConversionService.Uint64ToDate(c.FileHeader.ModificationDate));
-                Console.WriteLine(c.FileHeader.ReservedField);
-                Console.WriteLine(c.FileHeader.FileName);
+                if (!File.Exists(opts.Input))
+                {
+                    Console.WriteLine("File does not exists.");
+                    return 1;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Unexpected error. Invalid file.");
+                return 1;
             }
 
-            testContainer.WriteToOutputDirectory(fileSystem, output);
+            // Common check output directory
+            try
+            {
+                opts.Output += "\\";
+                if (!Directory.Exists(opts.Output))
+                {
+                    Directory.CreateDirectory(opts.Output);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Unexpected error. Invalid directory.");
+                return 1;
+            }
 
+            // Todo: checking plugin
+
+            IV8CommitRepository container = new FileV8CommitRepository(opts.Input);
+            var fileSystem = container.ReadV8FileSystem();
+            container.WriteToOutputDirectory(fileSystem, opts.Output);
+
+            return 0;
         }
     }
 }
