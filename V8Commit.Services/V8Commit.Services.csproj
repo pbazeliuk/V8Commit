@@ -41,10 +41,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConversionServices\ConversionService.cs" />
+    <Compile Include="FileV8Services\FileV8Reader.cs" />
     <Compile Include="HashServices\IHashService.cs" />
     <Compile Include="HashServices\MD5HashService.cs" />
     <Compile Include="HashServices\Sha512HashService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\V8Commit.Entities\V8Commit.Entities.csproj">
+      <Project>{b060ed1e-adcc-4ad1-8f84-bd63b8f30a95}</Project>
+      <Name>V8Commit.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

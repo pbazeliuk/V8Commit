@@ -40,10 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IV8CommitRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileRepository\FileV8CommitRepository.cs" />
-    <Compile Include="RamRepository\RamV8CommitRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\V8Commit.Entities\V8Commit.Entities.csproj">

@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\Options.cs" />
+    <Compile Include="Services\CommandLineVerbs\IVerb.cs" />
+    <Compile Include="Services\CommandLineVerbs\ParseVerb.cs" />
     <Compile Include="V8CommitEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -59,9 +60,9 @@
       <Project>{b060ed1e-adcc-4ad1-8f84-bd63b8f30a95}</Project>
       <Name>V8Commit.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\V8Commit.Repositories\V8Commit.Repositories.csproj">
-      <Project>{e4ffdf17-4881-4ff0-b941-30d3bd679201}</Project>
-      <Name>V8Commit.Repositories</Name>
+    <ProjectReference Include="..\..\V8Commit.Services\V8Commit.Services.csproj">
+      <Project>{0680410b-3b97-475d-8fbc-71581209a860}</Project>
+      <Name>V8Commit.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
