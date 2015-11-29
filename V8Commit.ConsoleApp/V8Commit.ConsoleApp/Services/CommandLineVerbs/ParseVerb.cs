@@ -2,6 +2,9 @@
 using System.IO;
 using CommandLine;
 using V8Commit.Services.FileV8Services;
+using V8Commit.Entities.V8FileSystem;
+using System.IO.Compression;
+using System.Text;
 
 namespace V8Commit.ConsoleApp
 {
@@ -70,10 +73,61 @@ namespace V8Commit.ConsoleApp
             using (FileV8Reader v8Commit = new FileV8Reader(Input))
             {
                 var fileSystem = v8Commit.ReadV8FileSystem();
-                v8Commit.WriteToOutputDirectory(v8Commit, fileSystem, Output);
+                WriteToOutputDirectory(v8Commit, fileSystem, Output);
             }
             
             return 0;
+        }
+
+        // TODO : make as plugins
+        public void WriteToOutputDirectory(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string outputDirectory)
+        {
+            foreach (var reference in fileSystem.References)
+            {
+                fileV8Reader.Seek(reference.RefToData, SeekOrigin.Begin);
+                string path = outputDirectory + reference.FileHeader.FileName;
+
+                using (MemoryStream memStream = new MemoryStream())
+                {
+                    using (MemoryStream memReader = new MemoryStream(fileV8Reader.ReadBytes(fileV8Reader.ReadBlockHeader())))
+                    {
+                        if (reference.IsInFlated)
+                        {
+                            using (DeflateStream deflateStream = new DeflateStream(memReader, CompressionMode.Decompress))
+                            {
+                                deflateStream.CopyTo(memStream);
+                            }
+                        }
+                        else
+                        {
+                            memReader.CopyTo(memStream);
+                        }
+                    }
+
+                    if (fileV8Reader.IsV8FileSystem(memStream, memStream.Capacity))
+                    {
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        memStream.Seek(0, SeekOrigin.Begin);
+                        using (FileV8Reader tmpV8Reader = new FileV8Reader(new BinaryReader(memStream, Encoding.Default, true)))
+                        {
+                            reference.Folder = tmpV8Reader.ReadV8FileSystem(false);
+                            WriteToOutputDirectory(tmpV8Reader, reference.Folder, path + "\\");
+                        }
+                    }
+                    else
+                    {
+                        using (FileStream fileStream = File.Create(path))
+                        {
+                            memStream.Seek(0, SeekOrigin.Begin);
+                            memStream.CopyTo(fileStream);
+                        }
+                    }
+                }
+            }
         }
     }
 }

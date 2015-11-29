@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using V8Commit.Entities.V8FileSystem;
 
 namespace V8Commit.Services.FileV8Services
@@ -44,28 +41,29 @@ namespace V8Commit.Services.FileV8Services
             Dispose(false);
         }
 
-        public void Dispose()
+        public bool IsV8FileSystem(MemoryStream memStream, Int32 fileSize)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
+            if (fileSize < V8ContainerHeader.Size() + V8BlockHeader.Size())
             {
-                if (disposing)
-                {
-                    if (_reader != null)
-                    {
-                        _reader.Dispose();
-                        _reader = null;
-                    }
-                }
-
-                disposed = true;
+                return false;
             }
-        }
 
+            memStream.Seek(0, SeekOrigin.Begin);
+            using (FileV8Reader tmpV8Reader = new FileV8Reader(new BinaryReader(memStream, Encoding.Default, true)))
+            {
+                try
+                {
+                    tmpV8Reader.ReadContainerHeader();
+                    tmpV8Reader.ReadBlockHeader();
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {
             V8FileSystem fileSystem = new V8FileSystem();
@@ -78,95 +76,7 @@ namespace V8Commit.Services.FileV8Services
 
             return fileSystem;
         }
-        public V8FileSystem ReadHeadersV8FileSystem()
-        {
-            V8FileSystem fileSystem = new V8FileSystem();
-
-            // Reading container 16 bytes
-            fileSystem.Container = ReadContainerHeader();
-
-            // Reading block header 31 bytes
-            fileSystem.BlockHeader = ReadBlockHeader();
-
-            return fileSystem;
-        }
-        public void Seek(Int32 offset, SeekOrigin origin)
-        {
-            _reader.BaseStream.Seek(offset, origin);
-        }
-        public bool IsV8FileSystem(MemoryStream memStream, Int32 fileSize)
-        {
-            if (fileSize < V8ContainerHeader.Size() + V8BlockHeader.Size())
-            {
-                return false;
-            }
-
-            memStream.Seek(0, SeekOrigin.Begin);
-            using (FileV8Reader v8Reader = new FileV8Reader(new BinaryReader(memStream, Encoding.Default, true)))
-            {
-                try
-                {
-                    v8Reader.ReadHeadersV8FileSystem();
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        // TODO : make as plugins
-        public void WriteToOutputDirectory(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string outputDirectory)
-        {
-            foreach (var reference in fileSystem.References)
-            {
-                fileV8Reader.Seek(reference.RefToData, SeekOrigin.Begin);
-                string path = outputDirectory + reference.FileHeader.FileName;
-
-                using (MemoryStream memStream = new MemoryStream())
-                {
-                    using (MemoryStream memReader = new MemoryStream(ReadBytes(ReadBlockHeader())))
-                    {
-                        if (reference.IsInFlated)
-                        {
-                            using (DeflateStream deflateStream = new DeflateStream(memReader, CompressionMode.Decompress))
-                            {
-                                deflateStream.CopyTo(memStream);
-                            }
-                        }
-                        else
-                        {
-                            memReader.CopyTo(memStream);
-                        }
-                    }
-
-                    if (fileV8Reader.IsV8FileSystem(memStream, memStream.Capacity))
-                    {
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-
-                        memStream.Seek(0, SeekOrigin.Begin);
-                        using (FileV8Reader v8Reader = new FileV8Reader(new BinaryReader(memStream, Encoding.Default, true)))
-                        {
-                            reference.Folder = v8Reader.ReadV8FileSystem(false);
-                            WriteToOutputDirectory(v8Reader, reference.Folder, path + "\\");
-                        }
-                    }
-                    else
-                    {
-                        using (FileStream fileStream = File.Create(path))
-                        {
-                            memStream.Seek(0, SeekOrigin.Begin);
-                            memStream.CopyTo(fileStream);
-                        }
-                    }
-                }
-            }
-        }
-        private V8ContainerHeader ReadContainerHeader()
+        public V8ContainerHeader ReadContainerHeader()
         {
             V8ContainerHeader container = new V8ContainerHeader();
             container.RefToNextPage = _reader.ReadInt32();
@@ -176,7 +86,7 @@ namespace V8Commit.Services.FileV8Services
 
             return container;
         }
-        private V8BlockHeader ReadBlockHeader()
+        public V8BlockHeader ReadBlockHeader()
         {
             char[] Block = _reader.ReadChars(V8BlockHeader.Size());
             if (Block[0] != 0x0d || Block[1] != 0x0a ||
@@ -197,19 +107,7 @@ namespace V8Commit.Services.FileV8Services
 
             return header;
         }
-        private V8FileHeader ReadFileHeader(Int32 dataSize)
-        {
-            V8FileHeader fileHeader = new V8FileHeader();
-            fileHeader.CreationDate = _reader.ReadUInt64();
-            fileHeader.ModificationDate = _reader.ReadUInt64();
-            fileHeader.ReservedField = _reader.ReadInt32();
-
-            string fileName = new string(_reader.ReadChars(dataSize - V8FileHeader.Size()));
-            fileHeader.FileName = fileName.Replace("\0", string.Empty);
-
-            return fileHeader;
-        }
-        private V8FileSystemReference ReadFileSystemReference(byte[] buffer, int position)
+        public V8FileSystemReference ReadFileSystemReference(byte[] buffer, int position)
         {
             V8FileSystemReference reference = new V8FileSystemReference();
             reference.RefToHeader = BitConverter.ToInt32(buffer, position);
@@ -218,7 +116,7 @@ namespace V8Commit.Services.FileV8Services
 
             return reference;
         }
-        private List<V8FileSystemReference> ReadFileSystemReferences(bool isInflated = true)
+        public List<V8FileSystemReference> ReadFileSystemReferences(bool isInflated = true)
         {
             V8BlockHeader blockHeader = ReadBlockHeader();
             Int32 dataSize = blockHeader.DataSize;
@@ -243,7 +141,19 @@ namespace V8Commit.Services.FileV8Services
 
             return references;
         }
-        private byte[] ReadBytes(V8BlockHeader blockHeader)
+        public V8FileHeader ReadFileHeader(Int32 dataSize)
+        {
+            V8FileHeader fileHeader = new V8FileHeader();
+            fileHeader.CreationDate = _reader.ReadUInt64();
+            fileHeader.ModificationDate = _reader.ReadUInt64();
+            fileHeader.ReservedField = _reader.ReadInt32();
+
+            string fileName = new string(_reader.ReadChars(dataSize - V8FileHeader.Size()));
+            fileHeader.FileName = fileName.Replace("\0", string.Empty);
+
+            return fileHeader;
+        }
+        public byte[] ReadBytes(V8BlockHeader blockHeader)
         {
             Int32 bytesReaded = 0;
             Int32 bytesToRead = 0;
@@ -264,6 +174,33 @@ namespace V8Commit.Services.FileV8Services
             }
 
             return bytes;
+        }
+
+        public void Seek(Int32 offset, SeekOrigin origin)
+        {
+            _reader.BaseStream.Seek(offset, origin);
+        }
+       
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (_reader != null)
+                    {
+                        _reader.Dispose();
+                        _reader = null;
+                    }
+                }
+
+                disposed = true;
+            }
         }
     }
 }
