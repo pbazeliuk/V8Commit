@@ -70,7 +70,7 @@ namespace V8Commit.ConsoleApp
             using (FileV8Reader v8Commit = new FileV8Reader(Input))
             {
                 var fileSystem = v8Commit.ReadV8FileSystem();
-                v8Commit.WriteToOutputDirectory(fileSystem, Output);
+                v8Commit.WriteToOutputDirectory(v8Commit, fileSystem, Output);
             }
             
             return 0;
