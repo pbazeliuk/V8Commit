@@ -65,7 +65,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\Loader.cs" />
     <Compile Include="Services\CommandLineVerbs\IVerb.cs" />
     <Compile Include="Services\CommandLineVerbs\ParseVerb.cs" />
     <Compile Include="V8CommitEntry.cs" />

@@ -21,6 +21,7 @@ using System;
 
 namespace V8Commit.Entities.V8FileSystem
 {
+    [Serializable]
     public class V8FileHeader
     {
         private UInt64 _creationDate;

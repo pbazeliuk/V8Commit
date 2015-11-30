@@ -21,9 +21,9 @@ using System;
 
 namespace V8Commit.Entities.V8FileSystem
 {
+    [Serializable]
     public class V8ContainerHeader
     {
-
         private Int32 _refToNextPage;
         private Int32 _pageSize;
         private Int32 _pagesCount;

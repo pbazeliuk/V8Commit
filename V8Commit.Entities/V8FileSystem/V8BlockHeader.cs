@@ -21,6 +21,7 @@ using System;
 
 namespace V8Commit.Entities.V8FileSystem
 {
+    [Serializable]
     public class V8BlockHeader : ICloneable
     {
         private Int32 _dataSize;

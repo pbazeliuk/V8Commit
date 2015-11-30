@@ -21,10 +21,10 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using CommandLine;
 using V8Commit.Plugins;
 using V8Commit.Services.FileV8Services;
-using System.ComponentModel.Composition.Hosting;
 
 namespace V8Commit.ConsoleApp
 {
@@ -115,9 +115,9 @@ namespace V8Commit.ConsoleApp
                     }
                 }   
             }
-            catch
+            catch(Exception exception)
             {
-                Console.WriteLine("Unexpected error.");
+                Console.WriteLine("{0} Exception caught.", exception);
                 return 1;
             }
 
