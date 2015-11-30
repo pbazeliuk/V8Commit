@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Service.Loader;
 using CommandLine;
 
 namespace V8Commit.ConsoleApp
@@ -8,6 +9,8 @@ namespace V8Commit.ConsoleApp
     {
         static void Main(string[] args)
         {
+            //AssemblyLoader.ResolveAssemblies<Assemblies>(AppDomain.CurrentDomain);
+
             var help = new StringWriter();
             new Parser(with => with.HelpWriter = help)
                 .ParseArguments(args, typeof(ParseVerb))

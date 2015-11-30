@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V8Commit.WebUI", "..\V8Commit.WebUI\V8Commit.WebUI.csproj", "{0A346BAA-94E9-40DA-83CA-FDA467F0A663}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.Parse.V8Unpack20", "..\Plugin.Parse.V8Unpack20\Plugin.Parse.V8Unpack20.csproj", "{E2467890-F768-4183-A69B-0CEB0EB3F72C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{0A346BAA-94E9-40DA-83CA-FDA467F0A663}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A346BAA-94E9-40DA-83CA-FDA467F0A663}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A346BAA-94E9-40DA-83CA-FDA467F0A663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2467890-F768-4183-A69B-0CEB0EB3F72C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2467890-F768-4183-A69B-0CEB0EB3F72C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2467890-F768-4183-A69B-0CEB0EB3F72C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2467890-F768-4183-A69B-0CEB0EB3F72C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

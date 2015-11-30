@@ -1,10 +1,10 @@
 ﻿
 namespace V8Commit.Plugins
 {
-    public interface IPlugin
+    public interface IPluginMetadata
     {
         string Name { get; }
-        string Version { get; }
         string Author { get; }
+        string Version { get; }
     }
 }

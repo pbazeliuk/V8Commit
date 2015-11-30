@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using CommandLine;
+using V8Commit.Plugins;
 using V8Commit.Services.FileV8Services;
-using V8Commit.Entities.V8FileSystem;
-using System.IO.Compression;
-using System.Text;
+using System.ComponentModel.Composition.Hosting;
 
 namespace V8Commit.ConsoleApp
 {
@@ -20,6 +21,12 @@ namespace V8Commit.ConsoleApp
         [Option('p', "plugin", Required = true, HelpText = "The plugin will be used to output the source files.")]
         public string Plugin { get; set; }
 
+        [Option('t', "threads", Required = false, Default = 1, HelpText = "Currently not used.")]
+        public int Threads { get; set; }
+
+        [ImportMany(typeof(IParsePlugin), AllowRecomposition = true)]
+        private IEnumerable<Lazy<IParsePlugin, IPluginMetadata>> _plugins;
+
         public int Invoke()
         {
             // Common check input file
@@ -27,7 +34,7 @@ namespace V8Commit.ConsoleApp
             {
                 if (!File.Exists(Input))
                 {
-                    Console.WriteLine("File does not exists.");
+                    Console.WriteLine("File does not exist.");
                     return 1;
                 }
             }
@@ -52,82 +59,51 @@ namespace V8Commit.ConsoleApp
                 return 1;
             }
 
-            // Todo: checking plugin
-
-            //try
-            //{
-            //string folder = System.AppDomain.CurrentDomain.BaseDirectory;
-            //string[] files = System.IO.Directory.GetFiles(folder, "*.dll");
-            //foreach (string file in files)
-            //{
-            //    IPlugin plugin = IsPlugin(file);
-            //    if (plugin != null)
-            //        sPlugins.Add(plugin);
-            //}
-            //
-            //catch (Exception e)
-            //{
-            //    ToLog(e.Message);
-            //}
-
-            using (FileV8Reader v8Commit = new FileV8Reader(Input))
+            /* Try to parse with plugin (lazy loading .dll) */
+            try
             {
-                var fileSystem = v8Commit.ReadV8FileSystem();
-                WriteToOutputDirectory(v8Commit, fileSystem, Output);
-            }
-            
-            return 0;
-        }
-
-        // TODO : make as plugins
-        public void WriteToOutputDirectory(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string outputDirectory)
-        {
-            foreach (var reference in fileSystem.References)
-            {
-                fileV8Reader.Seek(reference.RefToData, SeekOrigin.Begin);
-                string path = outputDirectory + reference.FileHeader.FileName;
-
-                using (MemoryStream memStream = new MemoryStream())
+                /* Checking plugins directory */ 
+                string pluginDirectory = AppDomain.CurrentDomain.BaseDirectory + "\\plugins\\";
+                if (!Directory.Exists(pluginDirectory))
                 {
-                    using (MemoryStream memReader = new MemoryStream(fileV8Reader.ReadBytes(fileV8Reader.ReadBlockHeader())))
+                    Console.WriteLine("Loading plugin error. Plugins folder does not exist.");
+                    return 1;
+                }
+
+                /* Initializing DirectoryCatalog for CompositionContainer  */
+                using (var directory = new DirectoryCatalog(pluginDirectory))
+                {
+                    /* Initializing CompositionContainer for composing parts. */
+                    using (var container = new CompositionContainer(directory))
                     {
-                        if (reference.IsInFlated)
+                        /* Lazy loading plugins in _plugins */
+                        container.ComposeParts(this);
+
+                        /* Initialize FileV8Reader, V8FileSystem */
+                        using (FileV8Reader v8Reader = new FileV8Reader(Input))
                         {
-                            using (DeflateStream deflateStream = new DeflateStream(memReader, CompressionMode.Decompress))
+                            var fileSystem = v8Reader.ReadV8FileSystem();
+                            foreach (var plugin in _plugins)
                             {
-                                deflateStream.CopyTo(memStream);
+                                if (String.Equals(plugin.Metadata.Name, Plugin, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    /* Lazy loading matched plugin and try to parse input file */
+                                    plugin.Value.Parse(v8Reader, fileSystem, Output, Threads);
+                                    return 0;
+                                }
                             }
                         }
-                        else
-                        {
-                            memReader.CopyTo(memStream);
-                        }
                     }
-
-                    if (fileV8Reader.IsV8FileSystem(memStream, memStream.Capacity))
-                    {
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-
-                        memStream.Seek(0, SeekOrigin.Begin);
-                        using (FileV8Reader tmpV8Reader = new FileV8Reader(new BinaryReader(memStream, Encoding.Default, true)))
-                        {
-                            reference.Folder = tmpV8Reader.ReadV8FileSystem(false);
-                            WriteToOutputDirectory(tmpV8Reader, reference.Folder, path + "\\");
-                        }
-                    }
-                    else
-                    {
-                        using (FileStream fileStream = File.Create(path))
-                        {
-                            memStream.Seek(0, SeekOrigin.Begin);
-                            memStream.CopyTo(fileStream);
-                        }
-                    }
-                }
+                }   
             }
+            catch
+            {
+                Console.WriteLine("Unexpected error.");
+                return 1;
+            }
+
+            Console.WriteLine("Plugin with name: {0} not found.", Plugin);
+            return 1;
         }
     }
 }
