@@ -46,14 +46,6 @@ namespace Plugin.V8Commit20
                 throw new NotImplementedException();
             }
 
-            //List<IParsePlugin> d =  new
-            foreach (var reference in fileSystem.References)
-            {
-                fileV8Reader.Seek(reference.RefToData, SeekOrigin.Begin);
-                string path = output + reference.FileHeader.FileName;
-            }
         }
-
- 
     }
 }
