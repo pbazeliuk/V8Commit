@@ -39,7 +39,21 @@ namespace Plugin.V8Commit20
     {
         public void Parse(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string output, int threads = 1)
         {
-            List<IParsePlugin> d =  new
+            var root = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, @"root");
+            if (root == null)
+            {
+                Console.WriteLine("File root does not exist. Choose correct «1C:Enterprise 8» file.");
+                throw new NotImplementedException();
+            }
+
+            //List<IParsePlugin> d =  new
+            foreach (var reference in fileSystem.References)
+            {
+                fileV8Reader.Seek(reference.RefToData, SeekOrigin.Begin);
+                string path = output + reference.FileHeader.FileName;
+            }
         }
+
+ 
     }
 }

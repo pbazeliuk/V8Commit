@@ -79,6 +79,10 @@
       <Project>{b060ed1e-adcc-4ad1-8f84-bd63b8f30a95}</Project>
       <Name>V8Commit.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\V8Commit.Plugins\Plugin.Parse.V8Commit20\Plugin.Parse.V8Commit20.csproj">
+      <Project>{0e05235b-61e7-4c5d-a382-243e514f705d}</Project>
+      <Name>Plugin.Parse.V8Commit20</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\V8Commit.Plugins\V8Commit.Plugins.csproj">
       <Project>{e9aaaa4e-8c40-456c-8b5c-ff8622eec768}</Project>
       <Name>V8Commit.Plugins</Name>

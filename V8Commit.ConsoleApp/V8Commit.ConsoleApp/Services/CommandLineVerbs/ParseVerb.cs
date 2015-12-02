@@ -25,6 +25,7 @@ using System.ComponentModel.Composition.Hosting;
 using CommandLine;
 using V8Commit.Plugins;
 using V8Commit.Services.FileV8Services;
+using Plugin.V8Commit20;
 
 namespace V8Commit.ConsoleApp
 {
@@ -107,7 +108,9 @@ namespace V8Commit.ConsoleApp
                                 if (String.Equals(plugin.Metadata.Name, Plugin, StringComparison.OrdinalIgnoreCase))
                                 {
                                     /* Lazy loading matched plugin and try to parse input file */
-                                    plugin.Value.Parse(v8Reader, fileSystem, Output, Threads);
+                                    //plugin.Value.Parse(v8Reader, fileSystem, Output, Threads);
+                                    var tmp = new V8Commit20();
+                                    tmp.Parse(v8Reader, fileSystem, Output, Threads);
                                     return 0;
                                 }
                             }

@@ -135,6 +135,10 @@ namespace V8Commit.Services.FileV8Services
 
             return reference;
         }
+        public V8FileSystemReference FindFileSystemReferenceByFileHeaderName(List<V8FileSystemReference> references, string name)
+        {
+            return references.Find(reference => reference.FileHeader.FileName == name);
+        }
         public List<V8FileSystemReference> ReadFileSystemReferences(bool isInflated = true)
         {
             V8BlockHeader blockHeader = ReadBlockHeader();
