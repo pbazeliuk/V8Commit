@@ -111,6 +111,7 @@
   <ItemGroup>
     <Content Include="css\cover.css" />
     <Content Include="Global.asax" />
+    <Content Include="Images\V8Commit.png" />
     <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Scripts\libs\bootstrap\css\bootstrap.css" />
@@ -122,6 +123,7 @@
     <Content Include="Scripts\libs\bootstrap\js\npm.js" />
     <Content Include="Scripts\libs\jquery\jquery-2.1.4.js" />
     <Content Include="Scripts\pages\v8commit.js" />
+    <Content Include="V8Commit.ico" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +162,10 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
