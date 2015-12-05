@@ -18,26 +18,15 @@
  */
 
 using System;
-using System.IO;
-using CommandLine;
 
-namespace V8Commit.ConsoleApp
+namespace V8Commit.Services.ConversionServices
 {
-    class V8CommitEntry
+    public class UInt64ToDateTime : IConversionService<UInt64, DateTime>
     {
-        static void Main(string[] args)
+        public DateTime Convert(UInt64 source)
         {
-            UnityConfig.Initialize();
-
-            var help = new StringWriter();
-            new Parser(with => with.HelpWriter = help)
-                .ParseArguments(args, typeof(ParseVerb))
-                    .MapResult(
-                        (ParseVerb opts) => opts.Invoke(),
-                        errors => {
-                            Console.WriteLine(help.ToString());
-                            return 1;
-                        });
+            DateTime start = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return start.AddMilliseconds(source / 1000 * 100);
         }
     }
 }

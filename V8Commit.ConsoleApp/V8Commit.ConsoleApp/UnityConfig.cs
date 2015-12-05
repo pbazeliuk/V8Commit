@@ -19,32 +19,21 @@
 
 using System;
 using System.Security;
+using Microsoft.Practices.Unity;
+using Microsoft.Practices.ServiceLocation;
+using V8Commit.Services.ConversionServices;
 
-namespace V8Commit.Services
+namespace V8Commit.ConsoleApp
 {
-    public static class ConversionService
+    public static class UnityConfig
     {
-        public static SecureString ToSecureString(string source)
+        public static void Initialize()
         {
-            SecureString result = new SecureString();
-            if (string.IsNullOrEmpty(source))
-            {
-                return result;
-            }
+            IUnityContainer unityContainer = new UnityContainer();
+            ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
 
-            foreach (char c in source.ToCharArray())
-            {
-                result.AppendChar(c);
-            }
-
-            return result;
+            unityContainer.RegisterType<IConversionService<String, SecureString>, StringToSecureString>(new ContainerControlledLifetimeManager());
+            unityContainer.RegisterType<IConversionService<UInt64, DateTime>, UInt64ToDateTime>(new ContainerControlledLifetimeManager());
         }
-
-        public static DateTime Uint64ToDate(UInt64 source)
-        {
-            DateTime start = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc);       
-            return start.AddMilliseconds(source / 1000 * 100);
-        }
-
     }
 }

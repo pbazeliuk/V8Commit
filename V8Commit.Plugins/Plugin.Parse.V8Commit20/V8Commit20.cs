@@ -18,16 +18,16 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.IO;
 using System.IO.Compression;
+using System.ComponentModel.Composition;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using V8Commit.Entities.V8FileSystem;
 using V8Commit.Plugins;
 using V8Commit.Services.FileV8Services;
+using V8Commit.Services.ConversionServices;
 
 namespace Plugin.V8Commit20
 {
@@ -37,6 +37,13 @@ namespace Plugin.V8Commit20
         ExportMetadata("Version", "1.0.0.0")]
     public class V8Commit20 : IParsePlugin
     {
+        private readonly IConversionService<UInt64, DateTime> _convertionService;
+
+        public V8Commit20(IConversionService<UInt64, DateTime> covertionService)
+        {
+            this._convertionService = covertionService;
+        }
+
         public void Parse(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string output, int threads = 1)
         {
             var root = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, @"root");

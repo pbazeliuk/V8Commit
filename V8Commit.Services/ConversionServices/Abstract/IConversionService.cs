@@ -17,27 +17,10 @@
  *
  */
 
-using System;
-using System.IO;
-using CommandLine;
-
-namespace V8Commit.ConsoleApp
+namespace V8Commit.Services.ConversionServices
 {
-    class V8CommitEntry
+    public interface IConversionService<TypeIn, TypeOut>
     {
-        static void Main(string[] args)
-        {
-            UnityConfig.Initialize();
-
-            var help = new StringWriter();
-            new Parser(with => with.HelpWriter = help)
-                .ParseArguments(args, typeof(ParseVerb))
-                    .MapResult(
-                        (ParseVerb opts) => opts.Invoke(),
-                        errors => {
-                            Console.WriteLine(help.ToString());
-                            return 1;
-                        });
-        }
+        TypeOut Convert(TypeIn source);
     }
 }

@@ -18,26 +18,26 @@
  */
 
 using System;
-using System.IO;
-using CommandLine;
+using System.Security;
 
-namespace V8Commit.ConsoleApp
+namespace V8Commit.Services.ConversionServices
 {
-    class V8CommitEntry
+    public class StringToSecureString : IConversionService<String, SecureString>
     {
-        static void Main(string[] args)
+        public SecureString Convert(String source)
         {
-            UnityConfig.Initialize();
+            SecureString result = new SecureString();
+            if (string.IsNullOrEmpty(source))
+            {
+                return result;
+            }
 
-            var help = new StringWriter();
-            new Parser(with => with.HelpWriter = help)
-                .ParseArguments(args, typeof(ParseVerb))
-                    .MapResult(
-                        (ParseVerb opts) => opts.Invoke(),
-                        errors => {
-                            Console.WriteLine(help.ToString());
-                            return 1;
-                        });
+            foreach (char c in source.ToCharArray())
+            {
+                result.AppendChar(c);
+            }
+
+            return result;
         }
     }
 }

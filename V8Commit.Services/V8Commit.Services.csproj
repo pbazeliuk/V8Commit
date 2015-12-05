@@ -40,10 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConversionServices\ConversionService.cs" />
+    <Compile Include="ConversionServices\StringToSecureString.cs" />
+    <Compile Include="ConversionServices\Abstract\IConversionService.cs" />
+    <Compile Include="ConversionServices\UInt64ToDateTime.cs" />
     <Compile Include="FileV8Services\FileV8Reader.cs" />
     <Compile Include="FileV8Services\FileV8Tree.cs" />
-    <Compile Include="HashServices\IHashService.cs" />
+    <Compile Include="HashServices\Abstract\IHashService.cs" />
     <Compile Include="HashServices\MD5HashService.cs" />
     <Compile Include="HashServices\Sha512HashService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +56,7 @@
       <Name>V8Commit.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

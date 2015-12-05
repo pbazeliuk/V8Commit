@@ -123,7 +123,6 @@
     <Content Include="Scripts\libs\bootstrap\js\npm.js" />
     <Content Include="Scripts\libs\jquery\jquery-2.1.4.js" />
     <Content Include="Scripts\pages\v8commit.js" />
-    <Content Include="V8Commit.ico" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

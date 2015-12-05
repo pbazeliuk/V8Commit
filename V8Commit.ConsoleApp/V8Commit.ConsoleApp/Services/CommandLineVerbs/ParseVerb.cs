@@ -25,6 +25,10 @@ using System.ComponentModel.Composition.Hosting;
 using CommandLine;
 using V8Commit.Plugins;
 using V8Commit.Services.FileV8Services;
+using Microsoft.Practices.ServiceLocation;
+
+// Debug
+using V8Commit.Services.ConversionServices;
 using Plugin.V8Commit20;
 
 namespace V8Commit.ConsoleApp
@@ -109,8 +113,11 @@ namespace V8Commit.ConsoleApp
                                 {
                                     /* Lazy loading matched plugin and try to parse input file */
                                     //plugin.Value.Parse(v8Reader, fileSystem, Output, Threads);
-                                    var tmp = new V8Commit20();
+
+                                    // Debug
+                                    var tmp = new V8Commit20(ServiceLocator.Current.GetInstance<IConversionService<UInt64, DateTime>>());
                                     tmp.Parse(v8Reader, fileSystem, Output, Threads);
+
                                     return 0;
                                 }
                             }
