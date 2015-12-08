@@ -24,9 +24,10 @@ using System.ComponentModel.Composition;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+
+using _1CV8Adapters;
 using V8Commit.Entities.V8FileSystem;
 using V8Commit.Plugins;
-using V8Commit.Services.FileV8Services;
 using V8Commit.Services.ConversionServices;
 
 namespace Plugin.V8Commit20
@@ -58,14 +59,14 @@ namespace Plugin.V8Commit20
             fileV8Reader.Seek(root.RefToData, SeekOrigin.Begin);
             using (var stream = new MemoryStream(fileV8Reader.ReadBytes(fileV8Reader.ReadBlockHeader())))
             {
-                StringBuilder sb = new StringBuilder(stream.Capacity);
+                //StringBuilder sb = new StringBuilder(stream.Capacity);
                 if (root.IsInFlated)
                 {
                     using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
                     {
                         using (var reader = new StreamReader(deflateStream))
                         {
-                            sb.Append(reader.ReadToEnd());
+                            //sb.Append(reader.ReadToEnd());
                         }
                     }
                 }
@@ -73,14 +74,14 @@ namespace Plugin.V8Commit20
                 {
                     using (var reader = new StreamReader(stream))
                     {
-                        sb.Append(reader.ReadToEnd());
+                        //sb.Append(reader.ReadToEnd());
                     }
                 }
 
-                string str = sb.ToString();
+                //string str = sb.ToString();
                 //String result = new String(buffer, "UTF-8");
                 //Console.WriteLine("{0}", sb.ToString());
-                Console.WriteLine(sb.ToString());
+                //Console.WriteLine(sb.ToString());
                 //string str = Encoding.Default.GetString(buf);
             }
 

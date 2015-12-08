@@ -19,7 +19,7 @@
 
 using System.Collections.Generic;
 
-namespace V8Commit.Services.FileV8Services
+namespace _1CV8Adapters
 {
     public class FileV8Tree
     {

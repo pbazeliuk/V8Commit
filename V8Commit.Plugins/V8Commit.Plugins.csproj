@@ -45,13 +45,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\1CV8Adapters\1CV8Adapters.csproj">
+      <Project>{9d87b271-d34d-4594-95c2-af16f5692b5c}</Project>
+      <Name>1CV8Adapters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\V8Commit.Entities\V8Commit.Entities.csproj">
       <Project>{b060ed1e-adcc-4ad1-8f84-bd63b8f30a95}</Project>
       <Name>V8Commit.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\V8Commit.Services\V8Commit.Services.csproj">
-      <Project>{0680410b-3b97-475d-8fbc-71581209a860}</Project>
-      <Name>V8Commit.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -22,14 +22,17 @@ using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using CommandLine;
-using V8Commit.Plugins;
-using V8Commit.Services.FileV8Services;
 using Microsoft.Practices.ServiceLocation;
+using CommandLine;
+
+using _1CV8Adapters;
+using V8Commit.Plugins;
+
 
 // Debug
 using V8Commit.Services.ConversionServices;
 using Plugin.V8Commit20;
+
 
 namespace V8Commit.ConsoleApp
 {

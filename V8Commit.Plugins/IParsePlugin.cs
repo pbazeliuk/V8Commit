@@ -17,8 +17,8 @@
  *
  */
 
+using _1CV8Adapters;
 using V8Commit.Entities.V8FileSystem;
-using V8Commit.Services.FileV8Services;
 
 namespace V8Commit.Plugins
 {

@@ -43,12 +43,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\V8Commit.Entities\V8Commit.Entities.csproj">
-      <Project>{b060ed1e-adcc-4ad1-8f84-bd63b8f30a95}</Project>
-      <Name>V8Commit.Entities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Fake\" />
     <Folder Include="Sql\" />
   </ItemGroup>

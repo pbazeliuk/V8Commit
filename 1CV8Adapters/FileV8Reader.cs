@@ -21,9 +21,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
 using V8Commit.Entities.V8FileSystem;
 
-namespace V8Commit.Services.FileV8Services
+namespace _1CV8Adapters
 {
     public class FileV8Reader : IDisposable
     {
@@ -203,7 +204,7 @@ namespace V8Commit.Services.FileV8Services
         {
             _reader.BaseStream.Seek(offset, origin);
         }
-       
+
         public void Dispose()
         {
             Dispose(true);

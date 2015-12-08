@@ -92,6 +92,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\1CV8Adapters\1CV8Adapters.csproj">
+      <Project>{9d87b271-d34d-4594-95c2-af16f5692b5c}</Project>
+      <Name>1CV8Adapters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\V8Commit.Entities\V8Commit.Entities.csproj">
       <Project>{b060ed1e-adcc-4ad1-8f84-bd63b8f30a95}</Project>
       <Name>V8Commit.Entities</Name>

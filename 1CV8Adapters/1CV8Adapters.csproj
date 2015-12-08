@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0E05235B-61E7-4C5D-A382-243E514F705D}</ProjectGuid>
+    <ProjectGuid>{9D87B271-D34D-4594-95C2-AF16F5692B5C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Plugin.Parse.V8Commit20</RootNamespace>
-    <AssemblyName>Plugin.Parse.V8Commit20</AssemblyName>
+    <RootNamespace>_1CV8Adapters</RootNamespace>
+    <AssemblyName>1CV8Adapters</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,7 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,25 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="V8Commit20.cs" />
+    <Compile Include="FileV8Reader.cs" />
+    <Compile Include="FileV8Tree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\1CV8Adapters\1CV8Adapters.csproj">
-      <Project>{9d87b271-d34d-4594-95c2-af16f5692b5c}</Project>
-      <Name>1CV8Adapters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\V8Commit.Entities\V8Commit.Entities.csproj">
+    <ProjectReference Include="..\V8Commit.Entities\V8Commit.Entities.csproj">
       <Project>{b060ed1e-adcc-4ad1-8f84-bd63b8f30a95}</Project>
       <Name>V8Commit.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\V8Commit.Services\V8Commit.Services.csproj">
-      <Project>{0680410b-3b97-475d-8fbc-71581209a860}</Project>
-      <Name>V8Commit.Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\V8Commit.Plugins.csproj">
-      <Project>{e9aaaa4e-8c40-456c-8b5c-ff8622eec768}</Project>
-      <Name>V8Commit.Plugins</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
