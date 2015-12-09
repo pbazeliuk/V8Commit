@@ -118,6 +118,7 @@ namespace _1CV8Adapters
 
             int level = -1;
             bool isData = false;
+            bool isText = false;
 
             StringBuilder sb = new StringBuilder();
             while (!stream.EndOfStream)
@@ -125,6 +126,26 @@ namespace _1CV8Adapters
                 char[] array = stream.ReadLine().ToCharArray();
                 foreach (var c in array)
                 {
+                    if (c.Equals('"'))
+                    {
+                        if (isText)
+                        {
+                            isText = false;
+                            sb.Append(c);
+                            continue;
+                        }
+                        else
+                        {
+                            isText = true;
+                        }
+                    }
+
+                    if (isText)
+                    {
+                        sb.Append(c);
+                        continue;
+                    }
+
                     if (c.Equals(','))
                     {
                         if (isData)
@@ -168,6 +189,13 @@ namespace _1CV8Adapters
                         sb.Append(c);
                     }
                 }
+
+                // Adding CR+LF
+                if (isText)
+                {
+                    sb.Append("\r\n");
+                }
+
             }
             return tree;
         }

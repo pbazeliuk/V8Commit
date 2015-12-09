@@ -73,14 +73,23 @@ namespace Plugin.V8Commit20
                 for(int i = 2; i < count + 2; i++)
                 {
                     string formGUID = forms.GetNode(i).Value;
-                    var form = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, formGUID);
-                    if (form == null)
+                    var formDescription = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, formGUID);
+                    if (formDescription == null)
                     {
                         RaiseFileNotExistsException(formGUID);
                     }
 
-                    FileV8Tree formTree = fileV8Reader.ReadV8File(form);
+                    FileV8Tree formDescriptionTree = fileV8Reader.ReadV8File(formDescription);
+                    string formName = formDescriptionTree.GetLeaf(1, 1, 1, 1, 2).Value;
 
+
+                    var form = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, formGUID + ".0");
+                    if (form == null)
+                    {
+                        RaiseFileNotExistsException(formGUID + ".0");
+                    }
+
+                    FileV8Tree formTree = fileV8Reader.ReadV8File(form);
 
                 }
             }
