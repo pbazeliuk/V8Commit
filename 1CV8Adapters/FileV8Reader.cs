@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 
 using V8Commit.Entities.V8FileSystem;
@@ -83,6 +84,83 @@ namespace _1CV8Adapters
             }
 
             return true;
+        }
+        public FileV8Tree ReadV8File(V8FileSystemReference file)
+        {
+            Seek(file.RefToData, SeekOrigin.Begin);
+            using (var stream = new MemoryStream(ReadBytes(ReadBlockHeader())))
+            {
+                if (file.IsInFlated)
+                {
+                    using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
+                    {
+                        using (var reader = new StreamReader(deflateStream))
+                        {
+                            // TODO: input file system
+                            return ParseV8File(reader, file.FileHeader.FileName);
+                        }
+                    }
+                }
+                else
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return ParseV8File(reader, file.FileHeader.FileName);
+                        //sb.Append(reader.ReadToEnd());
+                    }
+                }
+            }
+        }
+        private FileV8Tree ParseV8File(StreamReader stream, string fileName)
+        {  
+            FileV8Tree tree = new FileV8Tree(@"Entry", fileName);
+            //FileV8Tree leaf = null;
+
+            int level = 0;
+            bool isData = false;
+
+            StringBuilder sb = new StringBuilder();
+            while (!stream.EndOfStream)
+            {
+                char[] array = stream.ReadLine().ToCharArray();
+                foreach (var c in array)
+                {
+                    if (c.Equals(','))
+                    {
+                        if (isData)
+                        {
+                            tree.AddLeaf(@"unknown", sb.ToString());
+                            sb.Clear();
+                        }
+                        continue; 
+                    }
+
+                    if (c.Equals('{'))
+                    {
+                        level++;
+                        isData = true;
+                        continue;
+                    }
+
+                    if (c.Equals('}'))
+                    {
+                        level--;
+                        if (isData)
+                        {
+                            isData = false;
+                            tree.AddLeaf(@"unknown", sb.ToString());
+                            sb.Clear();
+                        }
+                        continue;
+                    }
+
+                    if (isData)
+                    {
+                        sb.Append(c);
+                    }
+                }
+            }
+            return tree;
         }
         public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {

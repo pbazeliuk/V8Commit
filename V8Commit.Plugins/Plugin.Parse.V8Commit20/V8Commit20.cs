@@ -50,40 +50,40 @@ namespace Plugin.V8Commit20
             var root = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, @"root");
             if (root == null)
             {
+                // TODO: 
                 Console.WriteLine("File root does not exist. Choose correct «1C:Enterprise 8» file.");
                 throw new NotImplementedException();
             }
 
-            
+            fileV8Reader.ReadV8File(root);
 
-            fileV8Reader.Seek(root.RefToData, SeekOrigin.Begin);
-            using (var stream = new MemoryStream(fileV8Reader.ReadBytes(fileV8Reader.ReadBlockHeader())))
-            {
-                //StringBuilder sb = new StringBuilder(stream.Capacity);
-                if (root.IsInFlated)
-                {
-                    using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
-                    {
-                        using (var reader = new StreamReader(deflateStream))
-                        {
-                            //sb.Append(reader.ReadToEnd());
-                        }
-                    }
-                }
-                else
-                {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        //sb.Append(reader.ReadToEnd());
-                    }
-                }
+            //fileV8Reader.Seek(root.RefToData, SeekOrigin.Begin);
+            //using (var stream = new MemoryStream(fileV8Reader.ReadBytes(fileV8Reader.ReadBlockHeader())))
+            //{
+            //    if (root.IsInFlated)
+            //    {
+            //        using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
+            //        {
+            //            using (var reader = new StreamReader(deflateStream))
+            //            {
+            //                //sb.Append(reader.ReadToEnd());
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        using (var reader = new StreamReader(stream))
+            //        {
+            //            //sb.Append(reader.ReadToEnd());
+            //        }
+            //    }
 
-                //string str = sb.ToString();
-                //String result = new String(buffer, "UTF-8");
-                //Console.WriteLine("{0}", sb.ToString());
-                //Console.WriteLine(sb.ToString());
-                //string str = Encoding.Default.GetString(buf);
-            }
+            //    //string str = sb.ToString();
+            //    //String result = new String(buffer, "UTF-8");
+            //    //Console.WriteLine("{0}", sb.ToString());
+            //    //Console.WriteLine(sb.ToString());
+            //    //string str = Encoding.Default.GetString(buf);
+            //}
 
         }
     }
