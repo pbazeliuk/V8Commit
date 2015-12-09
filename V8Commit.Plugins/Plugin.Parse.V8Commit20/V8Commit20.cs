@@ -57,12 +57,23 @@ namespace Plugin.V8Commit20
 
             FileV8Tree rootTree = fileV8Reader.ReadV8File(root);
             FileV8Tree fileDescription = rootTree.GetLeaf(1);
-            if(fileDescription == null)
+            if(fileDescription.Equals(rootTree))
             {
                 // TODO:
+                Console.WriteLine("Root description not found. Choose correct «1C:Enterprise 8» file.");
+                throw new NotImplementedException();
+            }
+
+            var rootDescription = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, (string)fileDescription.Value);
+            if (rootDescription == null)
+            {
+                // TODO: 
                 Console.WriteLine("File root description does not exist. Choose correct «1C:Enterprise 8» file.");
                 throw new NotImplementedException();
             }
+
+            FileV8Tree descriptionTree = fileV8Reader.ReadV8File(rootDescription);
+
 
         }
     }

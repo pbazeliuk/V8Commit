@@ -26,6 +26,7 @@ namespace _1CV8Adapters
         private List<FileV8Tree> _leaves;
         private string _key;
         private object _value;
+        private FileV8Tree _parent;
 
         public string Key
         {
@@ -49,11 +50,23 @@ namespace _1CV8Adapters
                 _value = value;
             }
         }
+        public FileV8Tree Parent
+        {
+            get
+            {
+                return _parent;
+            }
+            set
+            {
+                _parent = value;
+            }
+        }
 
-        public FileV8Tree(string key, object value)
+        public FileV8Tree(string key, object value, FileV8Tree parent = null)
         {
             _key = key;
             _value = value;
+            _parent = parent;
         }
         ~FileV8Tree()
         {
@@ -72,13 +85,13 @@ namespace _1CV8Adapters
             }
             return current;
         }
-        public FileV8Tree AddLeaf(string key, object value)
+        public FileV8Tree AddLeaf(string key, object value, FileV8Tree parent = null)
         {
             if(_leaves == null)
             {
                 _leaves = new List<FileV8Tree>();
             }
-            FileV8Tree newLeaf = new FileV8Tree(key, value);
+            FileV8Tree newLeaf = new FileV8Tree(key, value, parent);
             _leaves.Add(newLeaf);
             return newLeaf;
         }

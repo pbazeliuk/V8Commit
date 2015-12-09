@@ -113,9 +113,10 @@ namespace _1CV8Adapters
         private FileV8Tree ParseV8File(StreamReader stream, string fileName)
         {  
             FileV8Tree tree = new FileV8Tree(@"Entry", fileName);
+            FileV8Tree parent = tree;
             //FileV8Tree leaf = null;
 
-            int level = 0;
+            int level = -1;
             bool isData = false;
 
             StringBuilder sb = new StringBuilder();
@@ -128,8 +129,12 @@ namespace _1CV8Adapters
                     {
                         if (isData)
                         {
-                            tree.AddLeaf(@"unknown", sb.ToString());
+                            parent.AddLeaf(@"unknown", sb.ToString(), parent);
                             sb.Clear();
+                        }
+                        else
+                        {
+                            isData = true;
                         }
                         continue; 
                     }
@@ -138,18 +143,23 @@ namespace _1CV8Adapters
                     {
                         level++;
                         isData = true;
+                        if(level > 0)
+                        {
+                            parent = parent.AddLeaf(@"unknown", @"unknown", parent);
+                        }
                         continue;
                     }
 
                     if (c.Equals('}'))
-                    {
-                        level--;
+                    { 
                         if (isData)
                         {
                             isData = false;
-                            tree.AddLeaf(@"unknown", sb.ToString());
+                            parent.AddLeaf(@"unknown", sb.ToString(), parent);
                             sb.Clear();
                         }
+                        level--;
+                        parent = parent.Parent;
                         continue;
                     }
 
