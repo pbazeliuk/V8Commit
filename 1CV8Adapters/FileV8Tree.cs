@@ -25,7 +25,7 @@ namespace _1CV8Adapters
     {
         private List<FileV8Tree> _leaves;
         private string _key;
-        private object _value;
+        private string _value;
         private FileV8Tree _parent;
 
         public string Key

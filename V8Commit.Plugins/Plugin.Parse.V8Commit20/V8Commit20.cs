@@ -54,16 +54,11 @@ namespace Plugin.V8Commit20
             }
 
             FileV8Tree rootTree = fileV8Reader.ReadV8File(root);
-            FileV8Tree rootGUID = rootTree.GetLeaf(1);
-            if(rootGUID.Equals(rootTree))
-            {
-                RaiseDescriptionNotFoundException(@"root");
-            }
-
-            var rootDescription = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, (string)rootGUID.Value);
+            string rootGUID = rootTree.GetLeaf(1).Value;
+            var rootDescription = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, rootGUID);
             if (rootDescription == null)
             {
-                RaiseFileNotExistsException((string)rootGUID.Value);
+                RaiseFileNotExistsException(rootGUID);
             }
 
             FileV8Tree descriptionTree = fileV8Reader.ReadV8File(rootDescription);
@@ -74,10 +69,18 @@ namespace Plugin.V8Commit20
             // There is forms guid? 
             if (forms.GetNode(0).Value.Equals("d5b0e5ed-256d-401c-9c36-f630cafd8a62"))
             {
-                int count = (int)forms.GetNode(1).Value;
+                int count = Convert.ToInt32(forms.GetNode(1).Value);
                 for(int i = 2; i < count + 2; i++)
                 {
-                    var formGUID = forms.GetNode(i);
+                    string formGUID = forms.GetNode(i).Value;
+                    var form = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, formGUID);
+                    if (form == null)
+                    {
+                        RaiseFileNotExistsException(formGUID);
+                    }
+
+                    FileV8Tree formTree = fileV8Reader.ReadV8File(form);
+
 
                 }
             }
