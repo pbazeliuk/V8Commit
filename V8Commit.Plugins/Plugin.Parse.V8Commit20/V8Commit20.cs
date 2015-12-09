@@ -50,31 +50,51 @@ namespace Plugin.V8Commit20
             var root = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, @"root");
             if (root == null)
             {
-                // TODO: 
-                Console.WriteLine("File root does not exist. Choose correct «1C:Enterprise 8» file.");
-                throw new NotImplementedException();
+                RaiseFileNotExistsException(@"root");
             }
 
             FileV8Tree rootTree = fileV8Reader.ReadV8File(root);
-            FileV8Tree fileDescription = rootTree.GetLeaf(1);
-            if(fileDescription.Equals(rootTree))
+            FileV8Tree rootGUID = rootTree.GetLeaf(1);
+            if(rootGUID.Equals(rootTree))
             {
-                // TODO:
-                Console.WriteLine("Root description not found. Choose correct «1C:Enterprise 8» file.");
-                throw new NotImplementedException();
+                RaiseDescriptionNotFoundException(@"root");
             }
 
-            var rootDescription = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, (string)fileDescription.Value);
+            var rootDescription = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, (string)rootGUID.Value);
             if (rootDescription == null)
             {
-                // TODO: 
-                Console.WriteLine("File root description does not exist. Choose correct «1C:Enterprise 8» file.");
-                throw new NotImplementedException();
+                RaiseFileNotExistsException((string)rootGUID.Value);
             }
 
             FileV8Tree descriptionTree = fileV8Reader.ReadV8File(rootDescription);
+            FileV8Tree objectModule = descriptionTree.GetLeaf(3, 1, 1, 3, 1, 1, 2);
+            FileV8Tree forms = descriptionTree.GetLeaf(3, 1, 5);
+            FileV8Tree models = descriptionTree.GetLeaf(3, 1, 4);
 
+            // There is forms guid? 
+            if (forms.GetNode(0).Value.Equals("d5b0e5ed-256d-401c-9c36-f630cafd8a62"))
+            {
+                int count = (int)forms.GetNode(1).Value;
+                for(int i = 2; i < count + 2; i++)
+                {
+                    var formGUID = forms.GetNode(i);
 
+                }
+            }
         }
+
+        private void RaiseDescriptionNotFoundException(string fileName)
+        {
+            // TODO:
+            Console.WriteLine("{0} description not found. Choose correct «1C:Enterprise 8» file.", fileName);
+            throw new NotImplementedException();
+        }
+        private void RaiseFileNotExistsException(string fileName)
+        {
+            // TODO:
+            Console.WriteLine("File {0} does not exist. Choose correct «1C:Enterprise 8» file.", fileName);
+            throw new NotImplementedException();
+        }
+
     }
 }

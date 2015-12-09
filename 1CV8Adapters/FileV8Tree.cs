@@ -85,6 +85,10 @@ namespace _1CV8Adapters
             }
             return current;
         }
+        public FileV8Tree GetNode(int index)
+        {
+            return _leaves[index];
+        }
         public FileV8Tree AddLeaf(string key, object value, FileV8Tree parent = null)
         {
             if(_leaves == null)
