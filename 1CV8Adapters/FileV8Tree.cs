@@ -39,7 +39,7 @@ namespace _1CV8Adapters
                 _key = value;
             }
         }
-        public object Value
+        public string Value
         {
             get
             {
@@ -62,7 +62,7 @@ namespace _1CV8Adapters
             }
         }
 
-        public FileV8Tree(string key, object value, FileV8Tree parent = null)
+        public FileV8Tree(string key, string value, FileV8Tree parent = null)
         {
             _key = key;
             _value = value;
@@ -89,7 +89,7 @@ namespace _1CV8Adapters
         {
             return _leaves[index];
         }
-        public FileV8Tree AddLeaf(string key, object value, FileV8Tree parent = null)
+        public FileV8Tree AddLeaf(string key, string value, FileV8Tree parent = null)
         {
             if(_leaves == null)
             {
