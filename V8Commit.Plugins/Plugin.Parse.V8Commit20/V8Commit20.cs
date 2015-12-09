@@ -100,15 +100,18 @@ namespace Plugin.V8Commit20
 
                     FileV8Tree formTree = fileV8Reader.ReadV8File(form);
                     string tmpSheet = formTree.GetLeaf(2).Value;
-                    string formModule = tmpSheet.Substring(1, tmpSheet.Length - 2).Replace("\"\"", "\"");
+                    string formModule = '\uFEFF' + tmpSheet.Substring(1, tmpSheet.Length - 2).Replace("\"\"", "\"");
 
                     string filePath = path + formName + ".txt";
-                    string hash = _hashService.HashString(formModule);
+                    string hashFile = _hashService.HashFile(filePath);
+                    string hashForm = _hashService.HashString(formModule);
 
-
-                    using (StreamWriter fileStream = new StreamWriter(filePath, false, new UTF8Encoding(true)))
+                    if (!hashForm.Equals(hashFile))
                     {
-                        fileStream.Write(formModule);
+                        using (StreamWriter fileStream = new StreamWriter(filePath))
+                        {
+                            fileStream.Write(formModule);
+                        }
                     }
                 }
             }
