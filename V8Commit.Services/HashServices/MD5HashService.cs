@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
@@ -27,6 +28,22 @@ namespace V8Commit.Services.HashServices
 {
     public class MD5HashService : IHashService
     {
+        public string HashFile(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return String.Empty;
+            }
+
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    byte[] rawData = md5.ComputeHash(stream);
+                    return BitConverter.ToString(rawData).Replace("-", String.Empty);
+                }
+            }
+        }
         public string HashString(string source)
         {
             if (String.IsNullOrEmpty(source))
@@ -37,7 +54,6 @@ namespace V8Commit.Services.HashServices
             byte[] rawData = Encoding.UTF8.GetBytes(source);
             return BitConverter.ToString(MakeHash(rawData)).Replace("-", String.Empty);
         }
-
         public string HashSecure(SecureString source)
         {
             if (source.Length == 0)
@@ -64,6 +80,6 @@ namespace V8Commit.Services.HashServices
             {
                 return md5Hash.ComputeHash(data);
             }
-        }
+        }       
     }
 }
