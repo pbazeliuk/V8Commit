@@ -32,7 +32,7 @@ using V8Commit.Plugins;
 // Debug
 using V8Commit.Services.ConversionServices;
 using Plugin.V8Commit20;
-
+using V8Commit.Services.HashServices;
 
 namespace V8Commit.ConsoleApp
 {
@@ -118,7 +118,8 @@ namespace V8Commit.ConsoleApp
                                     //plugin.Value.Parse(v8Reader, fileSystem, Output, Threads);
 
                                     // Debug
-                                    var tmp = new V8Commit20(ServiceLocator.Current.GetInstance<IConversionService<UInt64, DateTime>>());
+                                    var tmp = new V8Commit20(ServiceLocator.Current.GetInstance<IConversionService<UInt64, DateTime>>(),
+                                                             ServiceLocator.Current.GetInstance<IHashService>());
                                     tmp.Parse(v8Reader, fileSystem, Output, Threads);
 
                                     return 0;

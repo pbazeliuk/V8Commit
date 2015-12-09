@@ -23,6 +23,7 @@ using Microsoft.Practices.Unity;
 using Microsoft.Practices.ServiceLocation;
 
 using V8Commit.Services.ConversionServices;
+using V8Commit.Services.HashServices;
 
 namespace V8Commit.ConsoleApp
 {
@@ -33,8 +34,8 @@ namespace V8Commit.ConsoleApp
             IUnityContainer unityContainer = new UnityContainer();
             ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
 
-            unityContainer.RegisterType<IConversionService<String, SecureString>, StringToSecureString>(new ContainerControlledLifetimeManager());
             unityContainer.RegisterType<IConversionService<UInt64, DateTime>, UInt64ToDateTime>(new ContainerControlledLifetimeManager());
+            unityContainer.RegisterType<IHashService, MD5HashService>(new ContainerControlledLifetimeManager());
         }
     }
 }

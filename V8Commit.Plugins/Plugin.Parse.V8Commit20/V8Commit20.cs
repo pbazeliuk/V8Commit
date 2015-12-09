@@ -29,6 +29,7 @@ using _1CV8Adapters;
 using V8Commit.Entities.V8FileSystem;
 using V8Commit.Plugins;
 using V8Commit.Services.ConversionServices;
+using V8Commit.Services.HashServices;
 
 namespace Plugin.V8Commit20
 {
@@ -39,10 +40,12 @@ namespace Plugin.V8Commit20
     public class V8Commit20 : IParsePlugin
     {
         private readonly IConversionService<UInt64, DateTime> _convertionService;
+        private readonly IHashService _hashService;
 
-        public V8Commit20(IConversionService<UInt64, DateTime> covertionService)
+        public V8Commit20(IConversionService<UInt64, DateTime> covertionService, IHashService hashService)
         {
             this._convertionService = covertionService;
+            this._hashService = hashService;
         }
 
         public void Parse(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string output, int threads = 1)
@@ -80,7 +83,13 @@ namespace Plugin.V8Commit20
                     }
 
                     FileV8Tree formDescriptionTree = fileV8Reader.ReadV8File(formDescription);
-                    string formName = formDescriptionTree.GetLeaf(1, 1, 1, 1, 2).Value;
+                    string formName = formDescriptionTree.GetLeaf(1, 1, 1, 1, 2).Value.Replace("\"", "");
+                    string path = output + "\\Form\\" + formName + "\\";
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
 
 
                     var form = fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, formGUID + ".0");
@@ -90,7 +99,17 @@ namespace Plugin.V8Commit20
                     }
 
                     FileV8Tree formTree = fileV8Reader.ReadV8File(form);
+                    string tmpSheet = formTree.GetLeaf(2).Value;
+                    string formModule = tmpSheet.Substring(1, tmpSheet.Length - 2).Replace("\"\"", "\"");
 
+                    string filePath = path + formName + ".txt";
+                    string hash = _hashService.HashString(formModule);
+
+
+                    using (StreamWriter fileStream = new StreamWriter(filePath, false, new UTF8Encoding(true)))
+                    {
+                        fileStream.Write(formModule);
+                    }
                 }
             }
         }

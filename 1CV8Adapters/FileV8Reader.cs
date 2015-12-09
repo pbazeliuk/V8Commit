@@ -128,16 +128,9 @@ namespace _1CV8Adapters
                 {
                     if (c.Equals('"'))
                     {
-                        if (isText)
-                        {
-                            isText = false;
-                            sb.Append(c);
-                            continue;
-                        }
-                        else
-                        {
-                            isText = true;
-                        }
+                        isText = !isText;
+                        sb.Append(c);
+                        continue;
                     }
 
                     if (isText)
