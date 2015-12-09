@@ -63,6 +63,15 @@ namespace _1CV8Adapters
             }         
         }
 
+        public FileV8Tree GetLeaf(params int[] values)
+        {
+            FileV8Tree current = this;
+            foreach (var value in values)
+            {
+                current = current._leaves[value];
+            }
+            return current;
+        }
         public FileV8Tree AddLeaf(string key, object value)
         {
             if(_leaves == null)

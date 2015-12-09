@@ -106,7 +106,6 @@ namespace _1CV8Adapters
                     using (var reader = new StreamReader(stream))
                     {
                         return ParseV8File(reader, file.FileHeader.FileName);
-                        //sb.Append(reader.ReadToEnd());
                     }
                 }
             }
