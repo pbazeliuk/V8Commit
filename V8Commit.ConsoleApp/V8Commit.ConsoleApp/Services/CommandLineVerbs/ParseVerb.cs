@@ -27,11 +27,7 @@ using CommandLine;
 
 using _1CV8Adapters;
 using V8Commit.Plugins;
-
-
-// Debug
 using V8Commit.Services.ConversionServices;
-using Plugin.V8Commit20;
 using V8Commit.Services.HashServices;
 
 namespace V8Commit.ConsoleApp
@@ -56,7 +52,7 @@ namespace V8Commit.ConsoleApp
 
         public int Invoke()
         {
-            // Common check input file
+            /* Common check input file */
             try
             {
                 if (!File.Exists(Input))
@@ -71,7 +67,7 @@ namespace V8Commit.ConsoleApp
                 return 1;
             }
 
-            // Common check output directory
+            /* Common check output directory */
             try
             {
                 Output += "\\";
@@ -103,6 +99,10 @@ namespace V8Commit.ConsoleApp
                     /* Initializing CompositionContainer for composing parts. */
                     using (var container = new CompositionContainer(directory))
                     {
+                        /* Constructor plugin injection */
+                        container.ComposeExportedValue("HashService", ServiceLocator.Current.GetInstance<IHashService>());
+                        container.ComposeExportedValue("CovertionService", ServiceLocator.Current.GetInstance<IConversionService<UInt64, DateTime>>());
+                        
                         /* Lazy loading plugins in _plugins */
                         container.ComposeParts(this);
 
@@ -115,13 +115,7 @@ namespace V8Commit.ConsoleApp
                                 if (String.Equals(plugin.Metadata.Name, Plugin, StringComparison.OrdinalIgnoreCase))
                                 {
                                     /* Lazy loading matched plugin and try to parse input file */
-                                    //plugin.Value.Parse(v8Reader, fileSystem, Output, Threads);
-
-                                    // Debug
-                                    var tmp = new V8Commit20(ServiceLocator.Current.GetInstance<IConversionService<UInt64, DateTime>>(),
-                                                             ServiceLocator.Current.GetInstance<IHashService>());
-                                    tmp.Parse(v8Reader, fileSystem, Output, Threads);
-
+                                    plugin.Value.Parse(v8Reader, fileSystem, Output, Threads);
                                     return 0;
                                 }
                             }

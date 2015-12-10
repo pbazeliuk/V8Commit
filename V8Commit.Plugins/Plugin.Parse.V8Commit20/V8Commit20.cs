@@ -39,7 +39,9 @@ namespace Plugin.V8Commit20
         private readonly IConversionService<UInt64, DateTime> _convertionService;
         private readonly IHashService _hashService;
 
-        public V8Commit20(IConversionService<UInt64, DateTime> covertionService, IHashService hashService)
+        [ImportingConstructor]
+        public V8Commit20([Import("HashService")] IHashService hashService,
+                          [Import("CovertionService")] IConversionService<UInt64, DateTime> covertionService)
         {
             this._convertionService = covertionService;
             this._hashService = hashService;
@@ -55,6 +57,27 @@ namespace Plugin.V8Commit20
             FileV8Tree models = rootPropertiesTree.GetLeaf(3, 1, 4);
 
             FileV8Tree objectModuleTree = GetDescriptionTree(fileV8Reader, fileSystem, objectModule.Value + ".0", @"text");
+            {
+                string path = output + "\\МодульОбъекта\\";
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                string module = '\uFEFF' + objectModuleTree.GetLeaf(0).Value;
+
+                string filePath = path + "МодульОбъекта.txt";
+                string hashFile = _hashService.HashFile(filePath);
+                string hashModule = _hashService.HashString(module);
+
+                if (!hashModule.Equals(hashFile))
+                {
+                    using (StreamWriter fileStream = new StreamWriter(filePath))
+                    {
+                        fileStream.Write(module);
+                    }
+                }
+            }
 
             // There is forms guid? 
             if (forms.GetNode(0).Value.Equals("d5b0e5ed-256d-401c-9c36-f630cafd8a62"))
@@ -88,6 +111,39 @@ namespace Plugin.V8Commit20
                     }
                 }
             }
+
+            // There is models guid? 
+            if (models.GetNode(0).Value.Equals("3daea016-69b7-4ed4-9453-127911372fe6"))
+            {
+                int count = Convert.ToInt32(models.GetNode(1).Value);
+                for (int i = 2; i < count + 2; i++)
+                {
+                    FileV8Tree modelTree = GetDescriptionTree(fileV8Reader, fileSystem, String.Empty, models.GetNode(i).Value + ".0");
+                    FileV8Tree modelPropertiesTree = GetDescriptionTree(fileV8Reader, fileSystem, String.Empty, models.GetNode(i).Value);
+
+                    string modelName = modelPropertiesTree.GetLeaf(1, 2, 2).Value.Replace("\"", "");
+                    string path = output + "\\СКД\\" + modelName + "\\";
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    string modelModule = modelTree.GetLeaf(0).Value.Replace("\0\0\0\0\u0001\0\0\0`&\0\0\0\0\0\0w\u0011\0\0\0\0\0\0﻿", "");
+
+                    string filePath = path + modelName + ".txt";
+                    string hashFile = _hashService.HashFile(filePath);
+                    string hashModel = _hashService.HashString(modelModule);
+
+                    if (!hashModel.Equals(hashFile))
+                    {
+                        using (StreamWriter fileStream = new StreamWriter(filePath))
+                        {
+                            fileStream.Write(modelModule);
+                        }
+                    }
+                }
+            }
+
         }
         private FileV8Tree GetDescriptionTree(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string folderName, string fileName)
         {

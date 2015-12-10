@@ -62,6 +62,13 @@ namespace _1CV8Adapters
             Dispose(false);
         }
 
+        /// <summary>
+        /// Checks the stream matching 1CV8 file 
+        /// </summary>
+        /// <param name="stream">
+        /// a MemoryStream, passed by reference, 
+        /// that contains the data to be checked
+        /// </param>
         public bool IsV8FileSystem(MemoryStream stream)
         {
             if (stream.Capacity < V8ContainerHeader.Size() + V8BlockHeader.Size())
