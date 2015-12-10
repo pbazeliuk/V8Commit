@@ -80,6 +80,16 @@ namespace Plugin.V8Commit20
                 }
             }
 
+               
+            if(!Directory.Exists(output + "Form"))
+            {
+                Directory.CreateDirectory(output + "Form");
+            }
+
+            if (!Directory.Exists(output + "СКД"))
+            {
+                Directory.CreateDirectory(output + "СКД");
+            }
             /* Directories that are mighty to be deleted */
             List<string> directories = new List<string>();
             directories.AddRange(Directory.GetDirectories(output + "Form"));
