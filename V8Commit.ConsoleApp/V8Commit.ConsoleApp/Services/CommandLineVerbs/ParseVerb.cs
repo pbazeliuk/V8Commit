@@ -30,6 +30,8 @@ using V8Commit.Plugins;
 using V8Commit.Services.ConversionServices;
 using V8Commit.Services.HashServices;
 
+using Plugin.V8Commit20;
+
 namespace V8Commit.ConsoleApp
 {
     [Verb("parse", HelpText = "Disassemble «1C:Enterprise 8» file on the source text files.")]

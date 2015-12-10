@@ -19,14 +19,15 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Text;
 
 using _1CV8Adapters;
 using V8Commit.Entities.V8FileSystem;
 using V8Commit.Plugins;
 using V8Commit.Services.ConversionServices;
 using V8Commit.Services.HashServices;
-using System.Text;
 
 namespace Plugin.V8Commit20
 {
@@ -48,7 +49,7 @@ namespace Plugin.V8Commit20
         }
 
         public void Parse(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string output, int threads = 1)
-        {      
+        {
             FileV8Tree rootTree = GetDescriptionTree(fileV8Reader, fileSystem, String.Empty, @"root");
             FileV8Tree rootPropertiesTree = GetDescriptionTree(fileV8Reader, fileSystem, String.Empty, rootTree.GetLeaf(1).Value);
            
@@ -79,7 +80,12 @@ namespace Plugin.V8Commit20
                 }
             }
 
-            // There is forms guid? 
+            /* Directories that are mighty to be deleted */
+            List<string> directories = new List<string>();
+            directories.AddRange(Directory.GetDirectories(output + "Form"));
+            directories.AddRange(Directory.GetDirectories(output + "СКД"));
+
+            /* There is forms guid? */
             if (forms.GetNode(0).Value.Equals("d5b0e5ed-256d-401c-9c36-f630cafd8a62"))
             {
                 int count = Convert.ToInt32(forms.GetNode(1).Value);
@@ -89,16 +95,19 @@ namespace Plugin.V8Commit20
                     FileV8Tree formPropertiesTree = GetDescriptionTree(fileV8Reader, fileSystem, String.Empty, forms.GetNode(i).Value);
 
                     string formName = formPropertiesTree.GetLeaf(1, 1, 1, 1, 2).Value.Replace("\"", "");
-                    string path = output + "\\Form\\" + formName + "\\";
+                    string path = output + "Form\\" + formName;
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
                     }
 
+                    // This directory is no needed to be deleted
+                    directories.Remove(path);
+                
                     string tmpSheet = formTree.GetLeaf(2).Value;
                     string formModule = '\uFEFF' + tmpSheet.Substring(1, tmpSheet.Length - 2).Replace("\"\"", "\"");
 
-                    string filePath = path + formName + ".txt";
+                    string filePath = path + "\\" + formName + ".txt";
                     string hashFile = _hashService.HashFile(filePath);
                     string hashForm = _hashService.HashString(formModule);
 
@@ -112,7 +121,7 @@ namespace Plugin.V8Commit20
                 }
             }
 
-            // There is models guid? 
+            /* There is models guid? */
             if (models.GetNode(0).Value.Equals("3daea016-69b7-4ed4-9453-127911372fe6"))
             {
                 int count = Convert.ToInt32(models.GetNode(1).Value);
@@ -122,15 +131,18 @@ namespace Plugin.V8Commit20
                     FileV8Tree modelPropertiesTree = GetDescriptionTree(fileV8Reader, fileSystem, String.Empty, models.GetNode(i).Value);
 
                     string modelName = modelPropertiesTree.GetLeaf(1, 2, 2).Value.Replace("\"", "");
-                    string path = output + "\\СКД\\" + modelName + "\\";
+                    string path = output + "СКД\\" + modelName;
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
                     }
 
+                    /* This directory is no needed to be deleted */
+                    directories.Remove(path);
+
                     string modelModule = modelTree.GetLeaf(0).Value.Replace("\0\0\0\0\u0001\0\0\0`&\0\0\0\0\0\0w\u0011\0\0\0\0\0\0﻿", "");
 
-                    string filePath = path + modelName + ".txt";
+                    string filePath = path + "\\" + modelName + ".txt";
                     string hashFile = _hashService.HashFile(filePath);
                     string hashModel = _hashService.HashString(modelModule);
 
@@ -144,6 +156,8 @@ namespace Plugin.V8Commit20
                 }
             }
 
+            // This directories are need to be deleted
+            DeleteDirectories(directories);
         }
         private FileV8Tree GetDescriptionTree(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string folderName, string fileName)
         {
@@ -190,7 +204,16 @@ namespace Plugin.V8Commit20
 
             return null; 
         }
-
+        private void DeleteDirectories(List<string> directories)
+        {
+            foreach (string directory in directories)
+            {
+                if (Directory.Exists(directory))
+                {
+                    Directory.Delete(directory, true);
+                } 
+            }
+        }
         private void RaiseDescriptionNotFoundException(string fileName)
         {
             // TODO:
