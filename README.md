@@ -1,6 +1,10 @@
 V8Commit
 ========
-V8Commit - tool for pack\unpack treatments(\*.epf), reports(\*.erf) and configurations(\*.cf) for "1C:Enterprise 8" platform.
+V8Commit - product is for disassembling «1C:Enterprise 8» configurations on the source text files.
+The resulting files can be used in version control systems and as for re-assembly.
 
-V8Commit - инструмент для разборки\сборки обработок(\*.epf), отчетов(\*.erf) и конфигураций(\*.cf) для платформы "1C:Предприятие 8".
+V8Commit - продукт для разборки конфигураций «1C:Предприятие 8» на текстовые файлы исходных кодов. 
+Полученные файлы можно использовать в системах контроля версий, а так же для обратной сборки.
+
+
 
