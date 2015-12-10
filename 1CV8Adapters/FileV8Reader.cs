@@ -62,15 +62,15 @@ namespace _1CV8Adapters
             Dispose(false);
         }
 
-        public bool IsV8FileSystem(MemoryStream memStream, Int32 fileSize)
+        public bool IsV8FileSystem(MemoryStream stream)
         {
-            if (fileSize < V8ContainerHeader.Size() + V8BlockHeader.Size())
+            if (stream.Capacity < V8ContainerHeader.Size() + V8BlockHeader.Size())
             {
                 return false;
             }
 
-            memStream.Seek(0, SeekOrigin.Begin);
-            using (FileV8Reader tmpV8Reader = new FileV8Reader(new BinaryReader(memStream, Encoding.Default, true)))
+            stream.Seek(0, SeekOrigin.Begin);
+            using (FileV8Reader tmpV8Reader = new FileV8Reader(new BinaryReader(stream, Encoding.Default, true)))
             {
                 try
                 {
@@ -85,113 +85,118 @@ namespace _1CV8Adapters
 
             return true;
         }
-        public FileV8Tree ReadV8File(V8FileSystemReference file)
+        public void ReadV8FileRawData(MemoryStream stream, V8FileSystemReference file)
         {
             Seek(file.RefToData, SeekOrigin.Begin);
-            using (var stream = new MemoryStream(ReadBytes(ReadBlockHeader())))
+            using (var tmpStream = new MemoryStream(ReadBytes(ReadBlockHeader())))
             {
                 if (file.IsInFlated)
                 {
-                    using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
+                    using (var deflateStream = new DeflateStream(tmpStream, CompressionMode.Decompress))
                     {
-                        using (var reader = new StreamReader(deflateStream))
-                        {
-                            // TODO: input file system
-                            return ParseV8File(reader, file.FileHeader.FileName);
-                        }
+                        deflateStream.CopyTo(stream);
                     }
                 }
                 else
                 {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        return ParseV8File(reader, file.FileHeader.FileName);
-                    }
+                    tmpStream.CopyTo(stream);
                 }
+
+                stream.Seek(0, SeekOrigin.Begin);
             }
         }
-        private FileV8Tree ParseV8File(StreamReader stream, string fileName)
+        public FileV8Tree ParseV8File(MemoryStream stream, string fileName)
         {  
             FileV8Tree tree = new FileV8Tree(@"Entry", fileName);
             FileV8Tree parent = tree;
-            //FileV8Tree leaf = null;
 
             int level = -1;
             bool isData = false;
             bool isText = false;
 
-            StringBuilder sb = new StringBuilder();
-            while (!stream.EndOfStream)
+            using (StreamReader reader = new StreamReader(stream))
             {
-                char[] array = stream.ReadLine().ToCharArray();
-                foreach (var c in array)
+                if (reader.Peek() != '{')
                 {
-                    if (c.Equals('"'))
+                    parent.AddLeaf(@"unknown", reader.ReadToEnd(), parent);
+                }
+                else
+                {
+                    StringBuilder sb = new StringBuilder();
+                    while (!reader.EndOfStream)
                     {
-                        isText = !isText;
-                        sb.Append(c);
-                        continue;
-                    }
-
-                    if (isText)
-                    {
-                        sb.Append(c);
-                        continue;
-                    }
-
-                    if (c.Equals(','))
-                    {
-                        if (isData)
+                        char[] array = reader.ReadLine().ToCharArray();
+                        foreach (var c in array)
                         {
-                            parent.AddLeaf(@"unknown", sb.ToString(), parent);
-                            sb.Clear();
-                        }
-                        else
-                        {
-                            isData = true;
-                        }
-                        continue; 
-                    }
+                            if (c.Equals('"'))
+                            {
+                                isText = !isText;
+                                sb.Append(c);
+                                continue;
+                            }
 
-                    if (c.Equals('{'))
-                    {
-                        level++;
-                        isData = true;
-                        if(level > 0)
-                        {
-                            parent = parent.AddLeaf(@"unknown", @"unknown", parent);
-                        }
-                        continue;
-                    }
+                            if (isText)
+                            {
+                                sb.Append(c);
+                                continue;
+                            }
 
-                    if (c.Equals('}'))
-                    { 
-                        if (isData)
-                        {
-                            isData = false;
-                            parent.AddLeaf(@"unknown", sb.ToString(), parent);
-                            sb.Clear();
-                        }
-                        level--;
-                        parent = parent.Parent;
-                        continue;
-                    }
+                            if (c.Equals(','))
+                            {
+                                if (isData)
+                                {
+                                    parent.AddLeaf(@"unknown", sb.ToString(), parent);
+                                    sb.Clear();
+                                }
+                                else
+                                {
+                                    isData = true;
+                                }
+                                continue;
+                            }
 
-                    if (isData)
-                    {
-                        sb.Append(c);
+                            if (c.Equals('{'))
+                            {
+                                level++;
+                                isData = true;
+                                if (level > 0)
+                                {
+                                    parent = parent.AddLeaf(@"unknown", @"unknown", parent);
+                                }
+                                continue;
+                            }
+
+                            if (c.Equals('}'))
+                            {
+                                if (isData)
+                                {
+                                    isData = false;
+                                    parent.AddLeaf(@"unknown", sb.ToString(), parent);
+                                    sb.Clear();
+                                }
+                                level--;
+                                parent = parent.Parent;
+                                continue;
+                            }
+
+                            if (isData)
+                            {
+                                sb.Append(c);
+                            }
+                        }
+
+                        // Adding CR+LF
+                        if (isText)
+                        {
+                            sb.Append("\r\n");
+                        }
                     }
                 }
-
-                // Adding CR+LF
-                if (isText)
-                {
-                    sb.Append("\r\n");
-                }
-
             }
+            
             return tree;
         }
+
         public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {
             V8FileSystem fileSystem = new V8FileSystem();

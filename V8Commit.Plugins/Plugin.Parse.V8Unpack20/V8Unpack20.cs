@@ -59,7 +59,7 @@ namespace Plugin.V8Unpack20
                         }
                     }
 
-                    if (fileV8Reader.IsV8FileSystem(memStream, memStream.Capacity))
+                    if (fileV8Reader.IsV8FileSystem(memStream))
                     {
                         if (!Directory.Exists(path))
                         {
