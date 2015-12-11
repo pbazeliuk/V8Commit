@@ -54,9 +54,9 @@ namespace Plugin.V8Commit20
             FileV8Tree rootPropertiesTree = GetDescriptionTree(fileV8Reader, fileSystem, String.Empty, rootTree.GetLeaf(1).Value);
            
             FileV8Tree objectModule = rootPropertiesTree.GetLeaf(3, 1, 1, 3, 1, 1, 2);
-            FileV8Tree forms = rootPropertiesTree.GetLeaf(3, 1, 5);
-            FileV8Tree models = rootPropertiesTree.GetLeaf(3, 1, 4);
-
+            FileV8Tree forms = GetFormsTree(rootPropertiesTree);
+            FileV8Tree models = GetModelsTree(rootPropertiesTree);  
+           
             FileV8Tree objectModuleTree = GetDescriptionTree(fileV8Reader, fileSystem, objectModule.Value + ".0", @"text");
             {
                 string path = output + "\\МодульОбъекта\\";
@@ -95,8 +95,7 @@ namespace Plugin.V8Commit20
             directories.AddRange(Directory.GetDirectories(output + "Form"));
             directories.AddRange(Directory.GetDirectories(output + "СКД"));
 
-            /* There is forms guid? */
-            if (forms.GetNode(0).Value.Equals("d5b0e5ed-256d-401c-9c36-f630cafd8a62"))
+            if (forms != null)
             {
                 int count = Convert.ToInt32(forms.GetNode(1).Value);
                 for(int i = 2; i < count + 2; i++)
@@ -131,8 +130,7 @@ namespace Plugin.V8Commit20
                 }
             }
 
-            /* There is models guid? */
-            if (models.GetNode(0).Value.Equals("3daea016-69b7-4ed4-9453-127911372fe6"))
+            if (models != null)
             {
                 int count = Convert.ToInt32(models.GetNode(1).Value);
                 for (int i = 2; i < count + 2; i++)
@@ -150,7 +148,8 @@ namespace Plugin.V8Commit20
                     /* This directory is no needed to be deleted */
                     directories.Remove(path);
 
-                    string modelModule = modelTree.GetLeaf(0).Value.Replace("\0\0\0\0\u0001\0\0\0`&\0\0\0\0\0\0w\u0011\0\0\0\0\0\0﻿", "");
+                    string tmpSheet = modelTree.GetLeaf(0).Value;
+                    string modelModule = tmpSheet.Substring(tmpSheet.IndexOf("<?xml"));
 
                     string filePath = path + "\\" + modelName + ".txt";
                     string hashFile = _hashService.HashFile(filePath);
@@ -168,6 +167,30 @@ namespace Plugin.V8Commit20
 
             // This directories are need to be deleted
             DeleteDirectories(directories);
+        }
+        private FileV8Tree GetFormsTree(FileV8Tree rootPropertiesTree)
+        {
+            if (rootPropertiesTree.GetLeaf(3, 1, 5, 0).Value.Equals(@"d5b0e5ed-256d-401c-9c36-f630cafd8a62"))
+            {
+                return rootPropertiesTree.GetLeaf(3, 1, 5);
+            }
+            else if (rootPropertiesTree.GetLeaf(3, 1, 5, 0).Value.Equals(@"a3b368c0-29e2-11d6-a3c7-0050bae0a776"))
+            {
+                return rootPropertiesTree.GetLeaf(3, 1, 5);
+            }
+            return null;
+        }
+        private FileV8Tree GetModelsTree(FileV8Tree rootPropertiesTree)
+        {
+            if (rootPropertiesTree.GetLeaf(3, 1, 3, 0).Value.Equals(@"3daea016-69b7-4ed4-9453-127911372fe6"))
+            {
+                return rootPropertiesTree.GetLeaf(3, 1, 3);
+            }
+            else if (rootPropertiesTree.GetLeaf(3, 1, 4, 0).Value.Equals(@"3daea016-69b7-4ed4-9453-127911372fe6"))
+            {
+                return rootPropertiesTree.GetLeaf(3, 1, 4);
+            }
+            return null;
         }
         private FileV8Tree GetDescriptionTree(FileV8Reader fileV8Reader, V8FileSystem fileSystem, string folderName, string fileName)
         {
