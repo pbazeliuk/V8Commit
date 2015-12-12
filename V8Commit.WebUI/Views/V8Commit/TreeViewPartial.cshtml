@@ -1,0 +1,52 @@
+﻿
+@using V8Commit.WebUI.Models
+
+@model List<TreeModel>
+
+<div class="col-md-3" style="margin-top:150px;">
+    <div class="easy-tree">
+        @if(Model != null)
+        {
+            <ul>
+            @foreach (var el in Model)
+            {
+                <li> @el.File
+                    @if(el.Children != null)
+                    {
+                        <ul>
+                            @foreach (var el1 in el.Children)
+                            {
+                                <li> @el1.File
+                                    @if(el1.Children != null)
+                                    {
+                                        <ul>
+                                            @foreach (var el2 in el1.Children)
+                                            {
+                                                <li> @el2.File </li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+            </ul>
+        }        
+    </div>
+</div>
+<script>
+    (function ($) {
+        function init() {
+            $('.easy-tree').EasyTree({
+                addable: false,
+                editable: false,
+                deletable: false
+            });
+        }
+
+        window.onload = init();
+    })(jQuery)
+</script>
+

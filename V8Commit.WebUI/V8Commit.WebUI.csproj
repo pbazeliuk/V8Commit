@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\cover.css" />
+    <Content Include="css\easyTree.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\V8Commit.png" />
     <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.css" />
@@ -121,6 +122,7 @@
     <Content Include="Scripts\libs\bootstrap\js\bootstrap.js" />
     <Content Include="Scripts\libs\bootstrap\js\bootstrap.min.js" />
     <Content Include="Scripts\libs\bootstrap\js\npm.js" />
+    <Content Include="Scripts\libs\easyTree\easyTree.js" />
     <Content Include="Scripts\libs\jquery\jquery-2.1.4.js" />
     <Content Include="Scripts\pages\v8commit.js" />
     <Content Include="Web.config" />
@@ -132,6 +134,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +150,7 @@
     <Content Include="Views\V8Commit\Index.cshtml" />
     <Content Include="Scripts\libs\bootstrap\css\bootstrap-theme.min.css.map" />
     <Content Include="Scripts\libs\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Views\V8Commit\TreeViewPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -156,7 +160,24 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\1CV8Adapters\1CV8Adapters.csproj">
+      <Project>{9d87b271-d34d-4594-95c2-af16f5692b5c}</Project>
+      <Name>1CV8Adapters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\V8Commit.Entities\V8Commit.Entities.csproj">
+      <Project>{B060ED1E-ADCC-4AD1-8F84-BD63B8F30A95}</Project>
+      <Name>V8Commit.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\V8Commit.Plugins\Plugin.Parse.V8Commit20\Plugin.Parse.V8Commit20.csproj">
+      <Project>{0e05235b-61e7-4c5d-a382-243e514f705d}</Project>
+      <Name>Plugin.Parse.V8Commit20</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\V8Commit.Services\V8Commit.Services.csproj">
+      <Project>{0680410b-3b97-475d-8fbc-71581209a860}</Project>
+      <Name>V8Commit.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

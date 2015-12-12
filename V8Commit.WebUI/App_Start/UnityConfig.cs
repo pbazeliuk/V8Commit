@@ -1,6 +1,10 @@
+using System;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using Unity.Mvc5;
+
+using V8Commit.Services.ConversionServices;
+using V8Commit.Services.HashServices;
 
 namespace V8Commit.WebUI
 {
@@ -21,7 +25,8 @@ namespace V8Commit.WebUI
 
         public static void RegisterTypes(UnityContainer container)
         {
-
+            container.RegisterType<IConversionService<UInt64, DateTime>, UInt64ToDateTime>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IHashService, MD5HashService>(new ContainerControlledLifetimeManager());
         }
 
     }

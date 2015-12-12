@@ -68,8 +68,8 @@
                     })
                     .done(function (data) {
                         //$(".TasksPartial").html(data);
-
-                        console.log("Data uploaded! (done)");
+                        $(".TreeViewPartial").html(data);
+                        //console.log("Data uploaded! (done)");
                     })
                     .fail(function (msg) {
                         console.log("Some error with file loading...");

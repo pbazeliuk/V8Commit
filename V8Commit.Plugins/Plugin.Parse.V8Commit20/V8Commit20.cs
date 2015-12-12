@@ -149,7 +149,17 @@ namespace Plugin.V8Commit20
                     directories.Remove(path);
 
                     string tmpSheet = modelTree.GetLeaf(0).Value;
-                    string modelModule = tmpSheet.Substring(tmpSheet.IndexOf("<?xml"));
+
+                    int index = tmpSheet.IndexOf("<?xml");
+                    string modelModule;
+                    if (tmpSheet.IndexOf("<?xml") == -1)
+                    {
+                        modelModule = tmpSheet;
+                    }
+                    else
+                    {
+                        modelModule = tmpSheet.Substring(tmpSheet.IndexOf("<?xml"));
+                    }
 
                     string filePath = path + "\\" + modelName + ".txt";
                     string hashFile = _hashService.HashFile(filePath);
