@@ -69,6 +69,47 @@ namespace _1CV8Adapters
         /// a MemoryStream, passed by reference, 
         /// that contains the data to be checked
         /// </param>
+        /// <example> This sample shows how to use 
+        /// the IsV8FileSystem method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     var fileSystem = v8Reader.ReadV8FileSystem();
+        ///     foreach (var reference in fileSystem.References)
+        ///     {
+        ///         v8Reader.Seek(reference.RefToData, SeekOrigin.Begin);
+        ///         using (MemoryStream memStream = new MemoryStream())
+        ///         {
+        ///             using (MemoryStream memReader = new MemoryStream(v8Reader.ReadBytes(v8Reader.ReadBlockHeader())))
+        ///             {
+        ///                 if (reference.IsInFlated)
+        ///                 {
+        ///                     using (DeflateStream deflateStream = new DeflateStream(memReader, CompressionMode.Decompress))
+        ///                     {
+        ///                         deflateStream.CopyTo(memStream);
+        ///                     }
+        ///                 }
+        ///                 else
+        ///                 {
+        ///                     memReader.CopyTo(memStream);
+        ///                 }
+        ///             }
+        ///
+        ///             if (v8Reader.IsV8FileSystem(memStream))
+        ///             {
+        ///                 // your code
+        ///             }
+        ///             else
+        ///             {
+        ///                 // your code        
+        ///             }
+        ///         }
+        ///     }
+        /// }
+        /// 
+        /// </code>
+        /// </example>
         public bool IsV8FileSystem(MemoryStream stream)
         {
             if (stream.Capacity < V8ContainerHeader.Size() + V8BlockHeader.Size())
