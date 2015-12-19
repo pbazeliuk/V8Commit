@@ -98,11 +98,11 @@ namespace _1CV8Adapters
         ///
         ///             if (v8Reader.IsV8FileSystem(memStream))
         ///             {
-        ///                 // your code
+        ///                 // some yours сode
         ///             }
         ///             else
         ///             {
-        ///                 // your code        
+        ///                 // some yours сode        
         ///             }
         ///         }
         ///     }
@@ -133,6 +133,41 @@ namespace _1CV8Adapters
 
             return true;
         }
+
+        /// <summary>
+        /// Writes deflated data bytes from V8FileSystemReference 
+        /// file to MemoryStream
+        /// </summary>
+        /// <param name="stream">
+        /// MemoryStream, passed by reference, 
+        /// in which data bytes will be placed
+        /// </param>
+        /// <param name="file">
+        /// V8FileSystemReference, passed by reference,
+        /// that contains references to file header and data
+        /// to read from BinaryReader (this._reader) 
+        /// </param>
+        /// <example> This sample shows how to use 
+        /// the ReadV8FileRawData method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     var fileSystem = v8Reader.ReadV8FileSystem();
+        ///     foreach (var reference in fileSystem.References)
+        ///     {
+        ///         using (MemoryStream stream = new MemoryStream())
+        ///         {
+        ///             v8Reader.ReadV8FileRawData(stream, file);
+        ///             
+        ///             // some yours сode
+        /// 
+        ///         }
+        ///     }
+        /// }
+        /// 
+        /// </code>
+        /// </example>
         public void ReadV8FileRawData(MemoryStream stream, V8FileSystemReference file)
         {
             Seek(file.RefToData, SeekOrigin.Begin);
