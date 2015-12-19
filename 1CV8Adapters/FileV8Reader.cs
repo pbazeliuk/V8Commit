@@ -115,7 +115,8 @@ namespace _1CV8Adapters
         /// </code>
         /// </example>
         /// <permission cref="System.Security.PermissionSet">Everyone 
-        /// can access this method.</permission>
+        /// can access this method.
+        /// </permission>
         public bool IsV8FileSystem(MemoryStream stream)
         {
             if (stream.Capacity < V8ContainerHeader.Size() + V8BlockHeader.Size())
@@ -175,7 +176,8 @@ namespace _1CV8Adapters
         /// </code>
         /// </example>
         /// <permission cref="System.Security.PermissionSet">Everyone 
-        /// can access this method.</permission>
+        /// can access this method.
+        /// </permission>
         public void ReadV8FileRawData(MemoryStream stream, V8FileSystemReference file)
         {
             Seek(file.RefToData, SeekOrigin.Begin);
@@ -233,7 +235,8 @@ namespace _1CV8Adapters
         /// </code>
         /// </example>
         /// <permission cref="System.Security.PermissionSet">Everyone 
-        /// can access this method.</permission>
+        /// can access this method.
+        /// </permission>
         public FileV8Tree ParseV8File(MemoryStream stream, string fileName)
         {  
             FileV8Tree tree = new FileV8Tree(@"Entry", fileName);
@@ -352,7 +355,8 @@ namespace _1CV8Adapters
         /// </code>
         /// </example>
         /// <permission cref="System.Security.PermissionSet">Everyone 
-        /// can access this method.</permission>
+        /// can access this method.
+        /// </permission>
         public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {
             V8FileSystem fileSystem = new V8FileSystem();
@@ -366,7 +370,17 @@ namespace _1CV8Adapters
             return fileSystem;
         }
 
-        public V8ContainerHeader ReadContainerHeader()
+        /// <summary>
+        /// Reads container header from 
+        /// BinaryReader (this._reader)
+        /// </summary>
+        /// <returns>
+        /// Returns V8ContainerHeader with data
+        /// </returns>
+        /// <permission cref="System.Security.PermissionSet">Only 
+        /// this class can access this method.
+        /// </permission>
+        private V8ContainerHeader ReadContainerHeader()
         {
             V8ContainerHeader container = new V8ContainerHeader();
             container.RefToNextPage = _reader.ReadInt32();
@@ -376,6 +390,7 @@ namespace _1CV8Adapters
 
             return container;
         }
+
         public V8BlockHeader ReadBlockHeader()
         {
             char[] Block = _reader.ReadChars(V8BlockHeader.Size());
