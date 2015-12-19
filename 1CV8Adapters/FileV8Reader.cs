@@ -66,7 +66,7 @@ namespace _1CV8Adapters
         /// Checks the stream matching 1CV8 file 
         /// </summary>
         /// <param name="stream">
-        /// a MemoryStream, passed by reference, 
+        /// MemoryStream, passed by reference, 
         /// that contains the data to be checked
         /// </param>
         /// <returns>
@@ -175,7 +175,7 @@ namespace _1CV8Adapters
         /// </code>
         /// </example>
         /// <permission cref="System.Security.PermissionSet">Everyone 
-        /// can access this method.</Permission>
+        /// can access this method.</permission>
         public void ReadV8FileRawData(MemoryStream stream, V8FileSystemReference file)
         {
             Seek(file.RefToData, SeekOrigin.Begin);
@@ -205,7 +205,7 @@ namespace _1CV8Adapters
         /// that contains the deflated data to parse
         /// </param>
         /// <param name="fileName">
-        /// a fileName, that will be tree root _value 
+        /// FileName, that will be tree root _value 
         /// </param>
         /// <returns>
         /// Returns FileV8Tree with parsed data in leaves 
@@ -233,7 +233,7 @@ namespace _1CV8Adapters
         /// </code>
         /// </example>
         /// <permission cref="System.Security.PermissionSet">Everyone 
-        /// can access this method.</Permission>
+        /// can access this method.</permission>
         public FileV8Tree ParseV8File(MemoryStream stream, string fileName)
         {  
             FileV8Tree tree = new FileV8Tree(@"Entry", fileName);
@@ -326,6 +326,33 @@ namespace _1CV8Adapters
             return tree;
         }
 
+        /// <summary>
+        /// Reads 1CV8 file system references from 
+        /// BinaryReader (this._reader)
+        /// </summary>
+        /// <param name="isInflated">
+        /// This parameter specifies the inflated data or not
+        /// in BinaryReader (this._reader)
+        /// </param>
+        /// <returns>
+        /// Returns V8FileSystem with references to 1CV8 files
+        /// </returns>
+        /// <example> This sample shows how to use 
+        /// the ReadV8FileSystem method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     V8FileSystem fileSystem = v8Reader.ReadV8FileSystem();
+        ///     
+        ///     // some yours сode
+        /// 
+        /// }
+        /// 
+        /// </code>
+        /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.</permission>
         public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {
             V8FileSystem fileSystem = new V8FileSystem();
@@ -338,6 +365,7 @@ namespace _1CV8Adapters
 
             return fileSystem;
         }
+
         public V8ContainerHeader ReadContainerHeader()
         {
             V8ContainerHeader container = new V8ContainerHeader();
