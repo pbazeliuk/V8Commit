@@ -391,6 +391,16 @@ namespace _1CV8Adapters
             return container;
         }
 
+        /// <summary>
+        /// Reads block header from 
+        /// BinaryReader (this._reader)
+        /// </summary>
+        /// <returns>
+        /// Returns V8BlockHeader with data
+        /// </returns>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
         public V8BlockHeader ReadBlockHeader()
         {
             char[] Block = _reader.ReadChars(V8BlockHeader.Size());
@@ -412,6 +422,7 @@ namespace _1CV8Adapters
 
             return header;
         }
+
         public V8FileSystemReference ReadFileSystemReference(byte[] buffer, int position)
         {
             V8FileSystemReference reference = new V8FileSystemReference();
