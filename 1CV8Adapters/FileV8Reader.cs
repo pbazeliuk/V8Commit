@@ -66,12 +66,12 @@ namespace _1CV8Adapters
         /// Checks the stream matching 1CV8 file 
         /// </summary>
         /// <param name="stream">
-        /// MemoryStream, passed by reference, 
+        /// <see cref="System.IO.MemoryStream"/>, passed by reference, 
         /// that contains the data to be checked
         /// </param>
         /// <returns>
         /// Returns the result of the comparison 
-        /// MemoryStream with file description 1CV8
+        /// <see cref="System.IO.MemoryStream"/> with file description 1CV8
         /// </returns>
         /// <example> This sample shows how to use 
         /// the IsV8FileSystem method from your plugin
@@ -142,17 +142,18 @@ namespace _1CV8Adapters
         }
 
         /// <summary>
-        /// Writes deflated data bytes from V8FileSystemReference 
-        /// file to MemoryStream
+        /// Writes deflated data bytes from 
+        /// <see cref = "V8Commit.Entities.V8FileSystem.V8FileSystemReference"/> 
+        /// file to <see cref="System.IO.MemoryStream"/>
         /// </summary>
         /// <param name="stream">
-        /// MemoryStream, passed by reference, 
+        /// <see cref="System.IO.MemoryStream"/>, passed by reference, 
         /// in which data bytes will be placed
         /// </param>
         /// <param name="file">
-        /// V8FileSystemReference, passed by reference,
-        /// that contains references to file header and data
-        /// to read from BinaryReader (this._reader) 
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystemReference"/>, 
+        /// passed by reference, that contains references to file header and 
+        /// data to read from <see cref="_reader"/> 
         /// </param>
         /// <example> This sample shows how to use 
         /// the ReadV8FileRawData method from your plugin
@@ -200,17 +201,19 @@ namespace _1CV8Adapters
         }
 
         /// <summary>
-        /// Parses 1CV8 data from MemoryStream
+        /// Parses 1CV8 data from <see cref="System.IO.MemoryStream"/>
         /// </summary>
         /// <param name="stream">
-        /// MemoryStream, passed by reference, 
+        /// <see cref="System.IO.MemoryStream"/>, passed by reference, 
         /// that contains the deflated data to parse
         /// </param>
         /// <param name="fileName">
-        /// FileName, that will be tree root _value 
+        /// Value, that will be put into tree root 
+        /// <see cref="_1CV8Adapters.FileV8Tree.Value"/> 
         /// </param>
         /// <returns>
-        /// Returns FileV8Tree with parsed data in leaves 
+        /// Returns <see cref="_1CV8Adapters.FileV8Tree"/> with parsed data in 
+        /// leaves 
         /// </returns>
         /// <example> This sample shows how to use 
         /// the ParseV8File method from your plugin
@@ -330,15 +333,17 @@ namespace _1CV8Adapters
         }
 
         /// <summary>
-        /// Reads 1CV8 file system references from 
-        /// BinaryReader (this._reader)
+        /// Reads 1CV8 
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystem"/> 
+        /// references from <see cref="_reader"/>
         /// </summary>
         /// <param name="isInflated">
-        /// This parameter specifies the inflated data or not
-        /// in BinaryReader (this._reader)
+        /// This parameter specifies the inflated data or not in 
+        /// <see cref="_reader"/>
         /// </param>
         /// <returns>
-        /// Returns V8FileSystem with references to 1CV8 files
+        /// Returns <see cref="V8Commit.Entities.V8FileSystem.V8FileSystem"/> 
+        /// with references to 1CV8 files
         /// </returns>
         /// <example> This sample shows how to use 
         /// the ReadV8FileSystem method from your plugin
@@ -371,11 +376,12 @@ namespace _1CV8Adapters
         }
 
         /// <summary>
-        /// Reads container header from 
-        /// BinaryReader (this._reader)
+        /// Reads <see cref="V8Commit.Entities.V8FileSystem.V8ContainerHeader"/> 
+        /// from <see cref="_reader"/>
         /// </summary>
         /// <returns>
-        /// Returns V8ContainerHeader with data
+        /// Returns <see cref="V8Commit.Entities.V8FileSystem.V8ContainerHeader"/> 
+        /// with data
         /// </returns>
         /// <permission cref="System.Security.PermissionSet">Only 
         /// this class can access this method.
@@ -392,11 +398,12 @@ namespace _1CV8Adapters
         }
 
         /// <summary>
-        /// Reads block header from 
-        /// BinaryReader (this._reader)
+        /// Reads <see cref="V8Commit.Entities.V8FileSystem.V8BlockHeader"/> 
+        /// from <see cref="_reader"/>
         /// </summary>
         /// <returns>
-        /// Returns V8BlockHeader with data
+        /// Returns <see cref="V8Commit.Entities.V8FileSystem.V8BlockHeader"/> 
+        /// with data
         /// </returns>
         /// <permission cref="System.Security.PermissionSet">Everyone 
         /// can access this method.
@@ -424,7 +431,9 @@ namespace _1CV8Adapters
         }
 
         /// <summary>
-        /// Reads file system reference from bytes buffer 
+        /// Reads 
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystemReference"/> 
+        /// from bytes buffer 
         /// </summary>
         /// <param name="buffer">
         /// Bytes buffer, passed by reference,
@@ -434,7 +443,9 @@ namespace _1CV8Adapters
         /// Start position to read from bytes buffer
         /// </param>
         /// <returns>
-        /// Returns V8FileSystemReference with data
+        /// Returns 
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystemReference"/> 
+        /// with data
         /// </returns>
         /// <permission cref="System.Security.PermissionSet">Everyone 
         /// can access this method.
