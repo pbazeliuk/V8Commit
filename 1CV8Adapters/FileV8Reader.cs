@@ -203,7 +203,7 @@ namespace _1CV8Adapters
         /// Parses 1CV8 data from MemoryStream
         /// </summary>
         /// <param name="stream">
-        /// a MemoryStream, passed by reference, 
+        /// MemoryStream, passed by reference, 
         /// that contains the deflated data to parse
         /// </param>
         /// <param name="fileName">
@@ -423,15 +423,32 @@ namespace _1CV8Adapters
             return header;
         }
 
-        public V8FileSystemReference ReadFileSystemReference(byte[] buffer, int position)
+        /// <summary>
+        /// Reads file system reference from bytes buffer 
+        /// </summary>
+        /// <param name="buffer">
+        /// Bytes buffer, passed by reference,
+        /// that contains the data to read
+        /// </param>
+        /// <param name="offset">
+        /// Start position to read from bytes buffer
+        /// </param>
+        /// <returns>
+        /// Returns V8FileSystemReference with data
+        /// </returns>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
+        public V8FileSystemReference ReadFileSystemReference(byte[] buffer, Int32 offset)
         {
             V8FileSystemReference reference = new V8FileSystemReference();
-            reference.RefToHeader = BitConverter.ToInt32(buffer, position);
-            reference.RefToData = BitConverter.ToInt32(buffer, position + 4);
-            reference.ReservedField = BitConverter.ToInt32(buffer, position + 8);
+            reference.RefToHeader = BitConverter.ToInt32(buffer, offset);
+            reference.RefToData = BitConverter.ToInt32(buffer, offset + 4);
+            reference.ReservedField = BitConverter.ToInt32(buffer, offset + 8);
 
             return reference;
         }
+
         public V8FileSystemReference FindFileSystemReferenceByFileHeaderName(List<V8FileSystemReference> references, string name)
         {
             return references.Find(reference => reference.FileHeader.FileName == name);
