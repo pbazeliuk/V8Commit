@@ -69,6 +69,10 @@ namespace _1CV8Adapters
         /// a MemoryStream, passed by reference, 
         /// that contains the data to be checked
         /// </param>
+        /// <returns>
+        /// Returns the result of the comparison 
+        /// MemoryStream with file description 1CV8
+        /// </returns>
         /// <example> This sample shows how to use 
         /// the IsV8FileSystem method from your plugin
         /// <code>
@@ -110,6 +114,8 @@ namespace _1CV8Adapters
         /// 
         /// </code>
         /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.</permission>
         public bool IsV8FileSystem(MemoryStream stream)
         {
             if (stream.Capacity < V8ContainerHeader.Size() + V8BlockHeader.Size())
@@ -168,6 +174,8 @@ namespace _1CV8Adapters
         /// 
         /// </code>
         /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.</Permission>
         public void ReadV8FileRawData(MemoryStream stream, V8FileSystemReference file)
         {
             Seek(file.RefToData, SeekOrigin.Begin);
@@ -188,6 +196,44 @@ namespace _1CV8Adapters
                 stream.Seek(0, SeekOrigin.Begin);
             }
         }
+
+        /// <summary>
+        /// Parses 1CV8 data from MemoryStream
+        /// </summary>
+        /// <param name="stream">
+        /// a MemoryStream, passed by reference, 
+        /// that contains the deflated data to parse
+        /// </param>
+        /// <param name="fileName">
+        /// a fileName, that will be tree root _value 
+        /// </param>
+        /// <returns>
+        /// Returns FileV8Tree with parsed data in leaves 
+        /// </returns>
+        /// <example> This sample shows how to use 
+        /// the ParseV8File method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     var fileSystem = v8Reader.ReadV8FileSystem();
+        ///     foreach (var reference in fileSystem.References)
+        ///     {
+        ///         using (MemoryStream stream = new MemoryStream())
+        ///         {
+        ///             v8Reader.ReadV8FileRawData(stream, file);
+        ///             FileV8Tree result = v8Reader.ParseV8File(stream, reference.FileHeader.FileName);
+        ///             
+        ///             // some yours сode
+        /// 
+        ///         }
+        ///     }
+        /// }
+        /// 
+        /// </code>
+        /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.</Permission>
         public FileV8Tree ParseV8File(MemoryStream stream, string fileName)
         {  
             FileV8Tree tree = new FileV8Tree(@"Entry", fileName);
