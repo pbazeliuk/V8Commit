@@ -27,6 +27,9 @@ using V8Commit.Entities.V8FileSystem;
 
 namespace _1CV8Adapters
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FileV8Reader : IDisposable
     {
         private bool disposed = false;
@@ -34,6 +37,10 @@ namespace _1CV8Adapters
         private readonly string _fileName;
         private BinaryReader _reader;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
         public FileV8Reader(string fileName)
         {
             if (File.Exists(fileName))
@@ -46,6 +53,11 @@ namespace _1CV8Adapters
                 throw new NotImplementedException();
             }
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader"></param>
         public FileV8Reader(BinaryReader reader)
         {
             if (reader != null)
@@ -57,6 +69,10 @@ namespace _1CV8Adapters
                 throw new NotImplementedException();
             }
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         ~FileV8Reader()
         {
             Dispose(false);
@@ -460,10 +476,22 @@ namespace _1CV8Adapters
             return reference;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="references"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public V8FileSystemReference FindFileSystemReferenceByFileHeaderName(List<V8FileSystemReference> references, string name)
         {
             return references.Find(reference => reference.FileHeader.FileName == name);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="isInflated"></param>
+        /// <returns></returns>
         public List<V8FileSystemReference> ReadFileSystemReferences(bool isInflated = true)
         {
             V8BlockHeader blockHeader = ReadBlockHeader();
@@ -489,6 +517,12 @@ namespace _1CV8Adapters
 
             return references;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataSize"></param>
+        /// <returns></returns>
         public V8FileHeader ReadFileHeader(Int32 dataSize)
         {
             V8FileHeader fileHeader = new V8FileHeader();
@@ -501,6 +535,12 @@ namespace _1CV8Adapters
 
             return fileHeader;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="blockHeader"></param>
+        /// <returns></returns>
         public byte[] ReadBytes(V8BlockHeader blockHeader)
         {
             Int32 bytesReaded = 0;
@@ -524,16 +564,29 @@ namespace _1CV8Adapters
             return bytes;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="origin"></param>
         public void Seek(Int32 offset, SeekOrigin origin)
         {
             _reader.BaseStream.Seek(offset, origin);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
