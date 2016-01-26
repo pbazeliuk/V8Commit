@@ -27,6 +27,9 @@ using V8Commit.Entities.V8FileSystem;
 
 namespace _1CV8Adapters
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FileV8Reader : IDisposable
     {
         private bool disposed = false;
@@ -34,6 +37,10 @@ namespace _1CV8Adapters
         private readonly string _fileName;
         private BinaryReader _reader;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
         public FileV8Reader(string fileName)
         {
             if (File.Exists(fileName))
@@ -46,6 +53,11 @@ namespace _1CV8Adapters
                 throw new NotImplementedException();
             }
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader"></param>
         public FileV8Reader(BinaryReader reader)
         {
             if (reader != null)
@@ -57,6 +69,10 @@ namespace _1CV8Adapters
                 throw new NotImplementedException();
             }
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         ~FileV8Reader()
         {
             Dispose(false);
@@ -66,9 +82,57 @@ namespace _1CV8Adapters
         /// Checks the stream matching 1CV8 file 
         /// </summary>
         /// <param name="stream">
-        /// a MemoryStream, passed by reference, 
+        /// <see cref="System.IO.MemoryStream"/>, passed by reference, 
         /// that contains the data to be checked
         /// </param>
+        /// <returns>
+        /// Returns the result of the comparison 
+        /// <see cref="System.IO.MemoryStream"/> with file description 1CV8
+        /// </returns>
+        /// <example> This sample shows how to use 
+        /// the IsV8FileSystem method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     var fileSystem = v8Reader.ReadV8FileSystem();
+        ///     foreach (var reference in fileSystem.References)
+        ///     {
+        ///         v8Reader.Seek(reference.RefToData, SeekOrigin.Begin);
+        ///         using (MemoryStream memStream = new MemoryStream())
+        ///         {
+        ///             using (MemoryStream memReader = new MemoryStream(v8Reader.ReadBytes(v8Reader.ReadBlockHeader())))
+        ///             {
+        ///                 if (reference.IsInFlated)
+        ///                 {
+        ///                     using (DeflateStream deflateStream = new DeflateStream(memReader, CompressionMode.Decompress))
+        ///                     {
+        ///                         deflateStream.CopyTo(memStream);
+        ///                     }
+        ///                 }
+        ///                 else
+        ///                 {
+        ///                     memReader.CopyTo(memStream);
+        ///                 }
+        ///             }
+        ///
+        ///             if (v8Reader.IsV8FileSystem(memStream))
+        ///             {
+        ///                 // some yours сode
+        ///             }
+        ///             else
+        ///             {
+        ///                 // some yours сode        
+        ///             }
+        ///         }
+        ///     }
+        /// }
+        /// 
+        /// </code>
+        /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
         public bool IsV8FileSystem(MemoryStream stream)
         {
             if (stream.Capacity < V8ContainerHeader.Size() + V8BlockHeader.Size())
@@ -92,6 +156,45 @@ namespace _1CV8Adapters
 
             return true;
         }
+
+        /// <summary>
+        /// Writes deflated data bytes from 
+        /// <see cref = "V8Commit.Entities.V8FileSystem.V8FileSystemReference"/> 
+        /// file to <see cref="System.IO.MemoryStream"/>
+        /// </summary>
+        /// <param name="stream">
+        /// <see cref="System.IO.MemoryStream"/>, passed by reference, 
+        /// in which data bytes will be placed
+        /// </param>
+        /// <param name="file">
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystemReference"/>, 
+        /// passed by reference, that contains references to file header and 
+        /// data to read from <see cref="_reader"/> 
+        /// </param>
+        /// <example> This sample shows how to use 
+        /// the ReadV8FileRawData method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     var fileSystem = v8Reader.ReadV8FileSystem();
+        ///     foreach (var reference in fileSystem.References)
+        ///     {
+        ///         using (MemoryStream stream = new MemoryStream())
+        ///         {
+        ///             v8Reader.ReadV8FileRawData(stream, file);
+        ///             
+        ///             // some yours сode
+        /// 
+        ///         }
+        ///     }
+        /// }
+        /// 
+        /// </code>
+        /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
         public void ReadV8FileRawData(MemoryStream stream, V8FileSystemReference file)
         {
             Seek(file.RefToData, SeekOrigin.Begin);
@@ -112,6 +215,47 @@ namespace _1CV8Adapters
                 stream.Seek(0, SeekOrigin.Begin);
             }
         }
+
+        /// <summary>
+        /// Parses 1CV8 data from <see cref="System.IO.MemoryStream"/>
+        /// </summary>
+        /// <param name="stream">
+        /// <see cref="System.IO.MemoryStream"/>, passed by reference, 
+        /// that contains the deflated data to parse
+        /// </param>
+        /// <param name="fileName">
+        /// Value, that will be put into tree root 
+        /// <see cref="_1CV8Adapters.FileV8Tree.Value"/> 
+        /// </param>
+        /// <returns>
+        /// Returns <see cref="_1CV8Adapters.FileV8Tree"/> with parsed data in 
+        /// leaves 
+        /// </returns>
+        /// <example> This sample shows how to use 
+        /// the ParseV8File method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     var fileSystem = v8Reader.ReadV8FileSystem();
+        ///     foreach (var reference in fileSystem.References)
+        ///     {
+        ///         using (MemoryStream stream = new MemoryStream())
+        ///         {
+        ///             v8Reader.ReadV8FileRawData(stream, file);
+        ///             FileV8Tree result = v8Reader.ParseV8File(stream, reference.FileHeader.FileName);
+        ///             
+        ///             // some yours сode
+        /// 
+        ///         }
+        ///     }
+        /// }
+        /// 
+        /// </code>
+        /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
         public FileV8Tree ParseV8File(MemoryStream stream, string fileName)
         {  
             FileV8Tree tree = new FileV8Tree(@"Entry", fileName);
@@ -204,6 +348,36 @@ namespace _1CV8Adapters
             return tree;
         }
 
+        /// <summary>
+        /// Reads 1CV8 
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystem"/> 
+        /// references from <see cref="_reader"/>
+        /// </summary>
+        /// <param name="isInflated">
+        /// This parameter specifies the inflated data or not in 
+        /// <see cref="_reader"/>
+        /// </param>
+        /// <returns>
+        /// Returns <see cref="V8Commit.Entities.V8FileSystem.V8FileSystem"/> 
+        /// with references to 1CV8 files
+        /// </returns>
+        /// <example> This sample shows how to use 
+        /// the ReadV8FileSystem method from your plugin
+        /// <code>
+        /// 
+        /// using (FileV8Reader v8Reader = new FileV8Reader(Input))
+        /// {
+        ///     V8FileSystem fileSystem = v8Reader.ReadV8FileSystem();
+        ///     
+        ///     // some yours сode
+        /// 
+        /// }
+        /// 
+        /// </code>
+        /// </example>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
         public V8FileSystem ReadV8FileSystem(bool isInflated = true)
         {
             V8FileSystem fileSystem = new V8FileSystem();
@@ -216,7 +390,19 @@ namespace _1CV8Adapters
 
             return fileSystem;
         }
-        public V8ContainerHeader ReadContainerHeader()
+
+        /// <summary>
+        /// Reads <see cref="V8Commit.Entities.V8FileSystem.V8ContainerHeader"/> 
+        /// from <see cref="_reader"/>
+        /// </summary>
+        /// <returns>
+        /// Returns <see cref="V8Commit.Entities.V8FileSystem.V8ContainerHeader"/> 
+        /// with data
+        /// </returns>
+        /// <permission cref="System.Security.PermissionSet">Only 
+        /// this class can access this method.
+        /// </permission>
+        private V8ContainerHeader ReadContainerHeader()
         {
             V8ContainerHeader container = new V8ContainerHeader();
             container.RefToNextPage = _reader.ReadInt32();
@@ -226,6 +412,18 @@ namespace _1CV8Adapters
 
             return container;
         }
+
+        /// <summary>
+        /// Reads <see cref="V8Commit.Entities.V8FileSystem.V8BlockHeader"/> 
+        /// from <see cref="_reader"/>
+        /// </summary>
+        /// <returns>
+        /// Returns <see cref="V8Commit.Entities.V8FileSystem.V8BlockHeader"/> 
+        /// with data
+        /// </returns>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
         public V8BlockHeader ReadBlockHeader()
         {
             char[] Block = _reader.ReadChars(V8BlockHeader.Size());
@@ -247,19 +445,53 @@ namespace _1CV8Adapters
 
             return header;
         }
-        public V8FileSystemReference ReadFileSystemReference(byte[] buffer, int position)
+
+        /// <summary>
+        /// Reads 
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystemReference"/> 
+        /// from bytes buffer 
+        /// </summary>
+        /// <param name="buffer">
+        /// Bytes buffer, passed by reference,
+        /// that contains the data to read
+        /// </param>
+        /// <param name="offset">
+        /// Start position to read from bytes buffer
+        /// </param>
+        /// <returns>
+        /// Returns 
+        /// <see cref="V8Commit.Entities.V8FileSystem.V8FileSystemReference"/> 
+        /// with data
+        /// </returns>
+        /// <permission cref="System.Security.PermissionSet">Everyone 
+        /// can access this method.
+        /// </permission>
+        public V8FileSystemReference ReadFileSystemReference(byte[] buffer, Int32 offset)
         {
             V8FileSystemReference reference = new V8FileSystemReference();
-            reference.RefToHeader = BitConverter.ToInt32(buffer, position);
-            reference.RefToData = BitConverter.ToInt32(buffer, position + 4);
-            reference.ReservedField = BitConverter.ToInt32(buffer, position + 8);
+            reference.RefToHeader = BitConverter.ToInt32(buffer, offset);
+            reference.RefToData = BitConverter.ToInt32(buffer, offset + 4);
+            reference.ReservedField = BitConverter.ToInt32(buffer, offset + 8);
 
             return reference;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="references"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public V8FileSystemReference FindFileSystemReferenceByFileHeaderName(List<V8FileSystemReference> references, string name)
         {
             return references.Find(reference => reference.FileHeader.FileName == name);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="isInflated"></param>
+        /// <returns></returns>
         public List<V8FileSystemReference> ReadFileSystemReferences(bool isInflated = true)
         {
             V8BlockHeader blockHeader = ReadBlockHeader();
@@ -285,6 +517,12 @@ namespace _1CV8Adapters
 
             return references;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataSize"></param>
+        /// <returns></returns>
         public V8FileHeader ReadFileHeader(Int32 dataSize)
         {
             V8FileHeader fileHeader = new V8FileHeader();
@@ -297,6 +535,12 @@ namespace _1CV8Adapters
 
             return fileHeader;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="blockHeader"></param>
+        /// <returns></returns>
         public byte[] ReadBytes(V8BlockHeader blockHeader)
         {
             Int32 bytesReaded = 0;
@@ -320,16 +564,29 @@ namespace _1CV8Adapters
             return bytes;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="origin"></param>
         public void Seek(Int32 offset, SeekOrigin origin)
         {
             _reader.BaseStream.Seek(offset, origin);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)

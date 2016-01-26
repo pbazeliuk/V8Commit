@@ -1,4 +1,20 @@
-#!/usr/bin/env python3
+#
+# Copyright © 2015 Petro Bazeliuk 
+#
+# The contents of this file are subject to the terms of one of the following
+# open source licenses: Apache 2.0 or or EPL 1.0 (the "Licenses"). You can
+# select the license that you prefer but you may not use this file except in
+# compliance with one of these Licenses.
+# 
+# You can obtain a copy of the Apache 2.0 license at
+# http://www.opensource.org/licenses/apache-2.0
+# 
+# You can obtain a copy of the EPL 1.0 license at
+# http://www.opensource.org/licenses/eclipse-1.0
+# 
+# See the Licenses for the specific language governing permissions and
+# limitations under the Licenses.
+#
 
 import os
 import sys
@@ -57,6 +73,10 @@ def decompile():
             logging.info("file %s" % filename)
             continue
 		#if filename[-2:] in ['cf']:
+        #   dataprocessor_files.append(filename)
+        #   logging.info("file %s" % filename)
+        #   continue
+		#if filename[-3:] in ['cfu']:
         #   dataprocessor_files.append(filename)
         #   logging.info("file %s" % filename)
         #   continue
