@@ -55,32 +55,34 @@ namespace Plugin.V8Commit20
            
             FileV8Tree objectModule = rootPropertiesTree.GetLeaf(3, 1, 1, 3, 1, 1, 2);
             FileV8Tree forms = GetFormsTree(rootPropertiesTree);
-            FileV8Tree models = GetModelsTree(rootPropertiesTree);  
-           
-            FileV8Tree objectModuleTree = GetDescriptionTree(fileV8Reader, fileSystem, objectModule.Value + ".0", @"text");
+            FileV8Tree models = GetModelsTree(rootPropertiesTree);
+
+            if (fileV8Reader.FindFileSystemReferenceByFileHeaderName(fileSystem.References, objectModule.Value + ".0") != null)
             {
-                string path = output + "\\МодульОбъекта\\";
-                if (!Directory.Exists(path))
+                FileV8Tree objectModuleTree = GetDescriptionTree(fileV8Reader, fileSystem, objectModule.Value + ".0", @"text");
                 {
-                    Directory.CreateDirectory(path);
-                }
-
-                string module = '\uFEFF' + objectModuleTree.GetLeaf(0).Value;
-
-                string filePath = path + "МодульОбъекта.txt";
-                string hashFile = _hashService.HashFile(filePath);
-                string hashModule = _hashService.HashString(module);
-
-                if (!hashModule.Equals(hashFile))
-                {
-                    using (StreamWriter fileStream = new StreamWriter(filePath))
+                    string path = output + "\\МодульОбъекта\\";
+                    if (!Directory.Exists(path))
                     {
-                        fileStream.Write(module);
+                        Directory.CreateDirectory(path);
+                    }
+
+                    string module = '\uFEFF' + objectModuleTree.GetLeaf(0).Value;
+
+                    string filePath = path + "МодульОбъекта.txt";
+                    string hashFile = _hashService.HashFile(filePath);
+                    string hashModule = _hashService.HashString(module);
+
+                    if (!hashModule.Equals(hashFile))
+                    {
+                        using (StreamWriter fileStream = new StreamWriter(filePath))
+                        {
+                            fileStream.Write(module);
+                        }
                     }
                 }
             }
-
-               
+                    
             if(!Directory.Exists(output + "Form"))
             {
                 Directory.CreateDirectory(output + "Form");
