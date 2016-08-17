@@ -19,7 +19,7 @@
 
 using System;
 
-namespace V8CommitCore.Infrastructure
+namespace V8Commit.Infrastructure
 {
     public static class UInt64Extensions
     {

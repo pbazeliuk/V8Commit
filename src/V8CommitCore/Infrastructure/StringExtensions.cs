@@ -22,7 +22,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace V8CommitCore.Infrastructure
+namespace V8Commit.Infrastructure
 {
     public static class StringExtensions
     {
