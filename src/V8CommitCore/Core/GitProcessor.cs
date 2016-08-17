@@ -18,6 +18,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace V8Commit.Core
@@ -36,9 +37,34 @@ namespace V8Commit.Core
             return ProcessGitCommand("rev-parse --show-toplevel");
         }
 
-        public string GetStagedFiles()
+        public void FilterStagedFiles(out List<string> stagedFiles)
         {
-            return ProcessGitCommand("diff --name-status --cached");
+            stagedFiles = new List<string>();
+            var output = ProcessGitCommand("diff --name-status --cached");
+            foreach (var item in output.Split('\n'))
+            {
+                if (!string.IsNullOrEmpty(item))
+                {
+                    var result = item.Split('\t');
+                    if (result.Length == 2)
+                    {
+                        if (result[0].Equals("A", StringComparison.OrdinalIgnoreCase) ||
+                            result[0].Equals("M", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var parts = result[1].Split('.');
+                            if (parts.Length != 0)
+                            {
+                                var ext = parts[parts.Length - 1];
+                                if (ext.Equals("epf", StringComparison.OrdinalIgnoreCase) ||
+                                    ext.Equals("erf", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    stagedFiles.Add(result[1]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private string ProcessGitCommand(string command)
@@ -62,6 +88,7 @@ namespace V8Commit.Core
                 {
                     throw new Exception(output);
                 }
+
                 return output;
             }
         }
