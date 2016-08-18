@@ -21,26 +21,21 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace V8Commit.Core
+namespace V8Commit.VersionControlSystem
 {
-    public class GitProcessor
+    public class GitVCS : IVersionControlSystem
     {
         private string _fileName;
 
-        public GitProcessor(string fileName)
+        public GitVCS(string fileName)
         {
             _fileName = fileName;
-        }
-
-        public string GetRepositoryRoot()
-        {
-            return ProcessGitCommand("rev-parse --show-toplevel");
         }
 
         public void FilterStagedFiles(out List<string> stagedFiles)
         {
             stagedFiles = new List<string>();
-            var output = ProcessGitCommand("diff --name-status --cached");
+            var output = ProcessCommand("diff --name-status --cached");
             foreach (var item in output.Split('\n'))
             {
                 if (!string.IsNullOrEmpty(item))
@@ -68,7 +63,12 @@ namespace V8Commit.Core
             }
         }
 
-        private string ProcessGitCommand(string command)
+        public string GetRepositoryRoot()
+        {
+            return ProcessCommand("rev-parse --show-toplevel");
+        }
+
+        public string ProcessCommand(string command)
         {
             var startInfo = new ProcessStartInfo
             {
@@ -85,7 +85,7 @@ namespace V8Commit.Core
                 string output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
 
-                if(process.ExitCode != 0)
+                if (process.ExitCode != 0)
                 {
                     throw new Exception(output);
                 }
