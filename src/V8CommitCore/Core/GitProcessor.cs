@@ -49,7 +49,8 @@ namespace V8Commit.Core
                     if (result.Length == 2)
                     {
                         if (result[0].Equals("A", StringComparison.OrdinalIgnoreCase) ||
-                            result[0].Equals("M", StringComparison.OrdinalIgnoreCase))
+                            result[0].Equals("M", StringComparison.OrdinalIgnoreCase) ||
+                            result[0].Equals("D", StringComparison.OrdinalIgnoreCase))
                         {
                             var parts = result[1].Split('.');
                             if (parts.Length != 0)
