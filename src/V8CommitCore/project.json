@@ -1,7 +1,10 @@
 {
   "version": "4.0.0",
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "embed": {
+      "include": [ "Resources/Resource.resx" ]
+    }
   },
 
   "dependencies": {
