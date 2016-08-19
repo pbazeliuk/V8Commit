@@ -125,13 +125,13 @@ The resulting files can be used in version control systems and as for re-assembl
 
 Command Line Parameters:
 	
-	git --path-path --plugin-name [--ram] [--async]
+	vcs path plugin [--in-memory]
 	Disassemble «1C:Enterprise 8» files and add to git index
 
-	parse --input-path --output-path --plugin-name [--ram] [--async]
+	parse input output plugin [--in-memory]
 	Disassemble «1C:Enterprise 8» file on the source text files
 
-	build --input-path --output-path --plugin-name [--ram] [--async]
+	build input output plugin [--in-memory]
 	Build the source text files
 
 	help 
