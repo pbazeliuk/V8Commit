@@ -1,3 +1,7 @@
+# **Проект закрыт:** 1С:Предприятие 8.3.8+ содержит все необходимые решения для версионирования.
+
+***
+
 V8Commit
 ========
 V8Commit - product is for disassembling «1C:Enterprise 8» configurations on the source text files.
